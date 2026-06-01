@@ -1,29 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero } from "@/components/sections/Hero";
+import { Stats } from "@/components/sections/Stats";
+import { About } from "@/components/sections/About";
+import { Story } from "@/components/sections/Story";
+import { Insights } from "@/components/sections/Insights";
+import { Team } from "@/components/sections/Team";
+import { DataSources } from "@/components/sections/DataSources";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "NEXUS — Connecting Pacific Agriculture, Climate, and Data" },
+      { name: "description", content: "Explore Pacific crop and livestock yield trends through data visualization, storytelling, and AI. Built for the Pacific Dataviz Challenge 2026." },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <Hero />
+      <Stats />
+      <About />
+      <Story />
+      <Insights />
+      <Team />
+      <DataSources />
+    </>
   );
 }

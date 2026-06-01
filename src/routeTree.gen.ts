@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as ExplorerRouteImport } from './routes/explorer'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/ai': typeof AiRoute
   '/explorer': typeof ExplorerRoute
   '/map': typeof MapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
   '/explorer': typeof ExplorerRoute
   '/map': typeof MapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/ai': typeof AiRoute
   '/explorer': typeof ExplorerRoute
   '/map': typeof MapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ai' | '/explorer' | '/map'
+  fullPaths: '/' | '/ai' | '/explorer' | '/map' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ai' | '/explorer' | '/map'
-  id: '__root__' | '/' | '/ai' | '/explorer' | '/map'
+  to: '/' | '/ai' | '/explorer' | '/map' | '/sitemap.xml'
+  id: '__root__' | '/' | '/ai' | '/explorer' | '/map' | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +76,18 @@ export interface RootRouteChildren {
   AiRoute: typeof AiRoute
   ExplorerRoute: typeof ExplorerRoute
   MapRoute: typeof MapRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/map': {
       id: '/map'
       path: '/map'
@@ -107,7 +124,18 @@ const rootRouteChildren: RootRouteChildren = {
   AiRoute: AiRoute,
   ExplorerRoute: ExplorerRoute,
   MapRoute: MapRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

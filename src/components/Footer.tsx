@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Mail, ExternalLink, BookOpen, Code2 } from "lucide-react";
+import { FiGithub, FiMail, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
 
 export function Footer() {
   return (
@@ -18,10 +18,10 @@ export function Footer() {
           </p>
           <div className="flex gap-3 mt-6">
             <a href="#" className="w-9 h-9 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
-              <Github className="w-4 h-4" />
+              <FiGithub className="w-4 h-4" />
             </a>
             <a href="#" className="w-9 h-9 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
-              <Mail className="w-4 h-4" />
+              <FiMail className="w-4 h-4" />
             </a>
           </div>
         </div>
@@ -57,18 +57,18 @@ export function Footer() {
                 className="inline-flex items-center gap-1.5 hover:text-white"
               >
                 Pacific Dataviz Challenge
-                <ExternalLink className="w-3 h-3" />
+                <FiExternalLink className="w-3 h-3" />
               </a>
             </li>
             <li>
               <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <BookOpen className="w-3 h-3" />
+                <FiBookOpen className="w-3 h-3" />
                 Documentation
               </a>
             </li>
             <li>
               <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <Code2 className="w-3 h-3" />
+                <FiCode className="w-3 h-3" />
                 API Reference
               </a>
             </li>

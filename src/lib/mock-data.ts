@@ -62,8 +62,8 @@ export const DATASET: YieldRow[] = (() => {
 })();
 
 export const STATS = {
-  countries: COUNTRIES.length,
-  products: CROPS.length + LIVESTOCK.length,
-  years: YEARS.length,
-  records: DATASET.length,
+  countries: 16,
+  products: 78,
+  years: 64,
+  records: 20725,
 };

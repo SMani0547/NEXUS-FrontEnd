@@ -74,7 +74,7 @@ export function Navbar() {
           <img
             src="/logo.png"
             alt="NEXUS"
-            className="h-9 w-9 rounded-lg object-cover object-center shadow-glow"
+            className="h-18 w-18 object-contain"
           />
           <span
             className={`font-display font-bold text-lg tracking-tight ${

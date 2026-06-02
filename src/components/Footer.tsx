@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Mail } from "lucide-react";
+import { Github, Mail, ExternalLink, BookOpen, Code2 } from "lucide-react";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-primary-foreground/90 mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-ocean flex items-center justify-center">
@@ -43,6 +43,35 @@ export function Footer() {
             <li><Link to="/" hash="#sources" className="hover:text-white">Data Sources</Link></li>
             <li><a href="#" className="hover:text-white">GitHub</a></li>
             <li><a href="#" className="hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-sm font-semibold text-white mb-4">Resources</h4>
+          <ul className="space-y-2 text-sm text-white/70">
+            <li>
+              <a
+                href="https://pacific-dataviz-challenge.spc.int/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 hover:text-white"
+              >
+                Pacific Dataviz Challenge
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </li>
+            <li>
+              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
+                <BookOpen className="w-3 h-3" />
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
+                <Code2 className="w-3 h-3" />
+                API Reference
+              </a>
+            </li>
           </ul>
         </div>
       </div>

@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { FiGithub, FiMail, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
+import {
+  FiHome,
+  FiBarChart2,
+  FiMap,
+  FiCpu,
+  FiUsers,
+  FiDatabase,
+  FiSend,
+} from "react-icons/fi";
 
 export function Footer() {
   return (
@@ -29,20 +38,20 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-semibold text-white mb-4">Platform</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><Link to="/" className="hover:text-white">Home</Link></li>
-            <li><Link to="/explorer" className="hover:text-white">Explorer</Link></li>
-            <li><Link to="/map" className="hover:text-white">Pacific Map</Link></li>
-            <li><Link to="/ai" className="hover:text-white">Nexus AI</Link></li>
+            <li><Link to="/" className="inline-flex items-center gap-2 hover:text-white"><FiHome className="w-3.5 h-3.5" />Home</Link></li>
+            <li><Link to="/explorer" className="inline-flex items-center gap-2 hover:text-white"><FiBarChart2 className="w-3.5 h-3.5" />Explorer</Link></li>
+            <li><Link to="/map" className="inline-flex items-center gap-2 hover:text-white"><FiMap className="w-3.5 h-3.5" />Pacific Map</Link></li>
+            <li><Link to="/ai" className="inline-flex items-center gap-2 hover:text-white"><FiCpu className="w-3.5 h-3.5" />Nexus AI</Link></li>
           </ul>
         </div>
 
         <div>
           <h4 className="text-sm font-semibold text-white mb-4">Project</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><Link to="/" hash="#team" className="hover:text-white">Team</Link></li>
-            <li><Link to="/" hash="#sources" className="hover:text-white">Data Sources</Link></li>
-            <li><a href="#" className="hover:text-white">GitHub</a></li>
-            <li><a href="#" className="hover:text-white">Contact</a></li>
+            <li><Link to="/" hash="team" className="inline-flex items-center gap-2 hover:text-white"><FiUsers className="w-3.5 h-3.5" />Team</Link></li>
+            <li><Link to="/" hash="sources" className="inline-flex items-center gap-2 hover:text-white"><FiDatabase className="w-3.5 h-3.5" />Data Sources</Link></li>
+            <li><a href="#" className="inline-flex items-center gap-2 hover:text-white"><FiGithub className="w-3.5 h-3.5" />GitHub</a></li>
+            <li><a href="#" className="inline-flex items-center gap-2 hover:text-white"><FiSend className="w-3.5 h-3.5" />Contact</a></li>
           </ul>
         </div>
 
@@ -54,21 +63,21 @@ export function Footer() {
                 href="https://pacific-dataviz-challenge.spc.int/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 hover:text-white"
+                className="inline-flex items-center gap-2 hover:text-white"
               >
+                <FiExternalLink className="w-3.5 h-3.5" />
                 Pacific Dataviz Challenge
-                <FiExternalLink className="w-3 h-3" />
               </a>
             </li>
             <li>
-              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <FiBookOpen className="w-3 h-3" />
+              <a href="#" className="inline-flex items-center gap-2 hover:text-white">
+                <FiBookOpen className="w-3.5 h-3.5" />
                 Documentation
               </a>
             </li>
             <li>
-              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <FiCode className="w-3 h-3" />
+              <a href="#" className="inline-flex items-center gap-2 hover:text-white">
+                <FiCode className="w-3.5 h-3.5" />
                 API Reference
               </a>
             </li>

@@ -16,9 +16,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-ocean flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="NEXUS"
+              className="h-9 w-9 rounded-lg object-cover object-center shadow-glow"
+            />
             <span className="font-display font-bold text-xl text-white">NEXUS</span>
           </div>
           <p className="text-sm text-white/70 max-w-md leading-relaxed">

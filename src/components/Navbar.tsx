@@ -71,9 +71,11 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="relative w-8 h-8 rounded-lg bg-gradient-ocean flex items-center justify-center shadow-glow">
-            <div className="w-2 h-2 bg-white rounded-full" />
-          </div>
+          <img
+            src="/logo.png"
+            alt="NEXUS"
+            className="h-9 w-9 rounded-lg object-cover object-center shadow-glow"
+          />
           <span
             className={`font-display font-bold text-lg tracking-tight ${
               heroTransparentMode ? "text-white" : "text-foreground"

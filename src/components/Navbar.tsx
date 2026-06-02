@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -15,10 +15,33 @@ const navItems = [
   { label: "Data", to: "/", hash: "#sources" },
 ];
 
+const navItemKey = (item: (typeof navItems)[number]) => `${item.to}${item.hash || ""}`;
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = useRouterState({ select: (r) => r.location.pathname });
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 });
+  const navRef = useRef<HTMLElement>(null);
+  const location = useRouterState({ select: (r) => r.location });
+  const pathname = location.pathname;
+  const hash = location.hash || "";
+  const heroTransparentMode = pathname === "/" && !scrolled;
+  const showSlidingPill = true;
+  const activeItem =
+    navItems.find((item) => pathname === item.to && (item.hash ? item.hash === hash : !hash)) ??
+    navItems.find((item) => pathname === item.to && !item.hash) ??
+    navItems[0];
+  const activeKey = navItemKey(activeItem);
+
+  const moveIndicatorTo = (key: string) => {
+    const el = navRef.current?.querySelector<HTMLAnchorElement>(`[data-nav-key="${key}"]`);
+    if (!el) return;
+    setIndicator({
+      left: el.offsetLeft,
+      width: el.offsetWidth,
+      opacity: 1,
+    });
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -26,6 +49,17 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!showSlidingPill) {
+      setIndicator((prev) => ({ ...prev, opacity: 0 }));
+      return;
+    }
+    moveIndicatorTo(activeKey);
+    const onResize = () => moveIndicatorTo(activeKey);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeKey, showSlidingPill]);
 
   return (
     <header
@@ -40,20 +74,45 @@ export function Navbar() {
           <div className="relative w-8 h-8 rounded-lg bg-gradient-ocean flex items-center justify-center shadow-glow">
             <div className="w-2 h-2 bg-white rounded-full" />
           </div>
-          <span className="font-display font-bold text-lg tracking-tight">
+          <span
+            className={`font-display font-bold text-lg tracking-tight ${
+              heroTransparentMode ? "text-white" : "text-foreground"
+            }`}
+          >
             NEXUS
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav
+          ref={navRef}
+          onMouseLeave={() => showSlidingPill && moveIndicatorTo(activeKey)}
+          className="hidden lg:flex items-center gap-1 relative"
+        >
+          {showSlidingPill && (
+            <span
+              className={`pointer-events-none absolute h-8 rounded-md transition-all duration-300 ${
+                heroTransparentMode ? "bg-white/12" : "bg-accent/15"
+              }`}
+              style={{
+                left: `${indicator.left}px`,
+                width: `${indicator.width}px`,
+                opacity: indicator.opacity,
+                transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+            />
+          )}
           {navItems.map((item) => {
-            const active = pathname === item.to && !item.hash;
+            const active =
+              pathname === item.to && (item.hash ? item.hash === hash : !hash);
             const id = item.hash.replace("#", "");
             return (
               <Link
                 key={item.label}
+                data-nav-key={navItemKey(item)}
                 to={item.to}
                 hash={id || undefined}
+                onMouseEnter={() => showSlidingPill && moveIndicatorTo(navItemKey(item))}
+                onFocus={() => showSlidingPill && moveIndicatorTo(navItemKey(item))}
                 onClick={(e) => {
                   if (id && pathname === item.to) {
                     e.preventDefault();
@@ -61,10 +120,14 @@ export function Navbar() {
                     history.replaceState(null, "", `${item.to}#${id}`);
                   }
                 }}
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                className={`${showSlidingPill ? "relative z-10" : ""} px-3 py-1.5 text-sm rounded-md transition-colors ${
                   active
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? heroTransparentMode
+                      ? "text-white font-medium"
+                      : "text-foreground font-medium"
+                    : heroTransparentMode
+                      ? "text-white/80 hover:text-white"
+                      : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}

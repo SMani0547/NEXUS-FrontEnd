@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { FiGithub, FiMail, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
 import {
   FiHome,
   FiBarChart2,
@@ -29,9 +29,6 @@ export function Footer() {
             <a href="#" className="w-9 h-9 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
               <FiGithub className="w-4 h-4" />
             </a>
-            <a href="#" className="w-9 h-9 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
-              <FiMail className="w-4 h-4" />
-            </a>
           </div>
         </div>
 
@@ -60,13 +57,13 @@ export function Footer() {
           <ul className="space-y-2 text-sm text-white/70">
             <li>
               <a
-                href="https://pacific-dataviz-challenge.spc.int/"
+                href="https://pacificdatavizchallenge.org/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 hover:text-white"
               >
-                <FiExternalLink className="w-3.5 h-3.5" />
                 Pacific Dataviz Challenge
+                <FiExternalLink className="w-3.5 h-3.5" />
               </a>
             </li>
             <li>

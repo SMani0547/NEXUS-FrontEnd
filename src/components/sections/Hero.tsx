@@ -31,7 +31,7 @@ export function Hero() {
       </div>
 
       {/* Pacific orbit visual */}
-      <div className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[700px] h-[700px] hidden lg:block animate-float">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[460px] h-[460px] xl:w-[620px] xl:h-[620px] hidden lg:block animate-float overflow-hidden">
         <svg viewBox="0 0 700 700" className="w-full h-full opacity-60">
           <defs>
             <radialGradient id="hero-grad" cx="50%" cy="50%" r="50%">
@@ -107,11 +107,11 @@ export function Hero() {
           </div>
 
           <div className="mt-12 flex items-center gap-8 text-xs text-white/50 uppercase tracking-wider">
-            <span>15 Countries</span>
+            <span>16 Countries</span>
             <span className="w-1 h-1 rounded-full bg-white/30" />
-            <span>15 Products</span>
+            <span>78 Products</span>
             <span className="w-1 h-1 rounded-full bg-white/30" />
-            <span>24 Years</span>
+            <span>64 Years</span>
           </div>
         </div>
       </div>

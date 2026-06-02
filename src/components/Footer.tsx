@@ -68,7 +68,7 @@ export function Footer() {
             </li>
             <li>
               <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <Code2 className="w-3 h-3" />
+                <FiCode className="w-3 h-3" />
                 API Reference
               </a>
             </li>

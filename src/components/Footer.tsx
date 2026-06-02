@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Mail, ExternalLink, BookOpen, Code2 } from "lucide-react";
+import { FiGithub, FiMail, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
 
 export function Footer() {
   return (

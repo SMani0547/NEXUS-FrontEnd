@@ -4,7 +4,7 @@ import { Github, Mail, ExternalLink, BookOpen, Code2 } from "lucide-react";
 export function Footer() {
   return (
     <footer className="bg-navy text-primary-foreground/90 mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-ocean flex items-center justify-center">

@@ -48,11 +48,19 @@ export function Navbar() {
         <nav className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => {
             const active = pathname === item.to && !item.hash;
+            const id = item.hash.replace("#", "");
             return (
               <Link
                 key={item.label}
                 to={item.to}
-                hash={item.hash || undefined}
+                hash={id || undefined}
+                onClick={(e) => {
+                  if (id && pathname === item.to) {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    history.replaceState(null, "", `${item.to}#${id}`);
+                  }
+                }}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   active
                     ? "text-foreground font-medium"
@@ -84,17 +92,29 @@ export function Navbar() {
       {open && (
         <div className="lg:hidden bg-background border-t border-border">
           <nav className="max-w-7xl mx-auto px-6 py-3 grid grid-cols-2 gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.to}
-                hash={item.hash || undefined}
-                onClick={() => setOpen(false)}
-                className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const id = item.hash.replace("#", "");
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  hash={id || undefined}
+                  onClick={(e) => {
+                    setOpen(false);
+                    if (id && pathname === item.to) {
+                      e.preventDefault();
+                      setTimeout(() => {
+                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        history.replaceState(null, "", `${item.to}#${id}`);
+                      }, 0);
+                    }
+                  }}
+                  className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       )}

@@ -119,12 +119,12 @@ npm run build
 ---
 
 ## Team Nexus
-Abhishek
-Parth
-Pranav
-Pranshu
-Shainesh
-Shiva
+- Abhishek
+- Parth
+- Pranav
+- Pranshu
+- Shainesh
+- Shiva
 
 ---
 

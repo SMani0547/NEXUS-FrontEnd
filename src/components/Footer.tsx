@@ -62,7 +62,7 @@ export function Footer() {
             </li>
             <li>
               <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
-                <BookOpen className="w-3 h-3" />
+                <FiBookOpen className="w-3 h-3" />
                 Documentation
               </a>
             </li>

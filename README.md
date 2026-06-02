@@ -107,23 +107,28 @@ Notes: not every country reports every product, data availability varies by year
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Start dev server
-bun run dev
+npm run dev
 
 # Build for production
-bun run build
+npm run build
 ```
 
 ---
 
 ## Team Nexus
-
-A team dedicated to transforming Pacific data into meaningful insights — across data, design, engineering, research, and AI.
+Abhishek
+Parth
+Pranav
+Pranshu
+Shainesh
+Shiva
 
 ---
 
 ## License
 
 Built for the Pacific Dataviz Challenge 2026.
+Open Source Project

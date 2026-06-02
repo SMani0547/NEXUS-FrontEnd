@@ -10,6 +10,19 @@ import {
   FiSend,
 } from "react-icons/fi";
 
+const githubProjects = [
+  {
+    name: "NEXUS FrontEnd",
+    desc: "React, TanStack, and data visualization interface.",
+    href: "https://github.com/SMani0547/NEXUS-FrontEnd",
+  },
+  {
+    name: "NEXUS BackEnd",
+    desc: "FastAPI data services and AI endpoints.",
+    href: "https://github.com/SMani0547/NEXUS-BackEnd",
+  },
+];
+
 export function Footer() {
   return (
     <footer className="bg-navy text-primary-foreground/90 mt-24">
@@ -19,7 +32,7 @@ export function Footer() {
             <img
               src="/logo.png"
               alt="NEXUS"
-              className="h-9 w-9 rounded-lg object-cover object-center shadow-glow"
+              className="h-18 w-18 object-contain"
             />
             <span className="font-display font-bold text-xl text-white">NEXUS</span>
           </div>
@@ -27,10 +40,27 @@ export function Footer() {
             Connecting Pacific Agriculture, Climate, and Data. Built for the
             Pacific Dataviz Challenge 2026.
           </p>
-          <div className="flex gap-3 mt-6">
-            <a href="#" className="w-9 h-9 rounded-md bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
-              <FiGithub className="w-4 h-4" />
-            </a>
+         
+          <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            {githubProjects.map((project) => (
+              <a
+                key={project.name}
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-all hover:-translate-y-0.5 hover:border-teal/50 hover:bg-white/[0.07] hover:shadow-glow"
+              >
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+                    <FiGithub className="h-3.5 w-3.5" />
+                    Open Source
+                  </span>
+                  <FiExternalLink className="h-4 w-4 text-white/40 transition-colors group-hover:text-teal" />
+                </div>
+                <div className="font-display text-sm font-semibold text-white">{project.name}</div>
+                <p className="mt-1 text-xs leading-relaxed text-white/60">{project.desc}</p>
+              </a>
+            ))}
           </div>
         </div>
 
@@ -49,8 +79,6 @@ export function Footer() {
           <ul className="space-y-2 text-sm text-white/70">
             <li><Link to="/" hash="team" className="inline-flex items-center gap-2 hover:text-white"><FiUsers className="w-3.5 h-3.5" />Team</Link></li>
             <li><Link to="/" hash="sources" className="inline-flex items-center gap-2 hover:text-white"><FiDatabase className="w-3.5 h-3.5" />Data Sources</Link></li>
-            <li><a href="#" className="inline-flex items-center gap-2 hover:text-white"><FiGithub className="w-3.5 h-3.5" />GitHub</a></li>
-            <li><a href="#" className="inline-flex items-center gap-2 hover:text-white"><FiSend className="w-3.5 h-3.5" />Contact</a></li>
           </ul>
         </div>
 

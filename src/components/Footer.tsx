@@ -45,6 +45,35 @@ export function Footer() {
             <li><a href="#" className="hover:text-white">Contact</a></li>
           </ul>
         </div>
+
+        <div>
+          <h4 className="text-sm font-semibold text-white mb-4">Resources</h4>
+          <ul className="space-y-2 text-sm text-white/70">
+            <li>
+              <a
+                href="https://pacific-dataviz-challenge.spc.int/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 hover:text-white"
+              >
+                Pacific Dataviz Challenge
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </li>
+            <li>
+              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
+                <BookOpen className="w-3 h-3" />
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="#" className="inline-flex items-center gap-1.5 hover:text-white">
+                <Code2 className="w-3 h-3" />
+                API Reference
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row justify-between gap-2 text-xs text-white/50">

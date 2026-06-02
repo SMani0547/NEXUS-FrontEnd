@@ -48,11 +48,19 @@ export function Navbar() {
         <nav className="hidden lg:flex items-center gap-1">
           {navItems.map((item) => {
             const active = pathname === item.to && !item.hash;
+            const id = item.hash.replace("#", "");
             return (
               <Link
                 key={item.label}
                 to={item.to}
-                hash={item.hash || undefined}
+                hash={id || undefined}
+                onClick={(e) => {
+                  if (id && pathname === item.to) {
+                    e.preventDefault();
+                    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    history.replaceState(null, "", `${item.to}#${id}`);
+                  }
+                }}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   active
                     ? "text-foreground font-medium"

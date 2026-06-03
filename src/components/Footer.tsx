@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { FiGithub, FiExternalLink, FiBookOpen, FiCode } from "react-icons/fi";
 import {
   FiHome,
@@ -8,6 +9,9 @@ import {
   FiUsers,
   FiDatabase,
   FiSend,
+  FiMonitor,
+  FiMoon,
+  FiSun,
 } from "react-icons/fi";
 
 const githubProjects = [
@@ -23,7 +27,44 @@ const githubProjects = [
   },
 ];
 
+type ThemeMode = "light" | "dark" | "system";
+
+const themeOptions: Array<{ mode: ThemeMode; label: string; icon: typeof FiMonitor }> = [
+  { mode: "system", label: "System", icon: FiMonitor },
+  { mode: "light", label: "Light", icon: FiSun },
+  { mode: "dark", label: "Dark", icon: FiMoon },
+];
+
+const applyThemeMode = (mode: ThemeMode) => {
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.classList.toggle("dark", mode === "dark" || (mode === "system" && prefersDark));
+};
+
 export function Footer() {
+  const [themeMode, setThemeMode] = useState<ThemeMode>("system");
+
+  useEffect(() => {
+    const storedMode = localStorage.getItem("nexus-theme-mode") as ThemeMode | null;
+    const initialMode = storedMode === "light" || storedMode === "dark" || storedMode === "system"
+      ? storedMode
+      : "system";
+
+    setThemeMode(initialMode);
+    applyThemeMode(initialMode);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("nexus-theme-mode", themeMode);
+    applyThemeMode(themeMode);
+
+    if (themeMode !== "system") return;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => applyThemeMode("system");
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
+  }, [themeMode]);
+
   return (
     <footer className="bg-navy text-primary-foreground/90 mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
@@ -103,6 +144,33 @@ export function Footer() {
               </a>
             </li>
           </ul>
+
+          <div className="mt-7">
+            <h4 className="text-sm font-semibold text-white mb-3">Theme</h4>
+            <div className="inline-flex rounded-lg border border-white/10 bg-white/[0.04] p-1">
+              {themeOptions.map(({ mode, label, icon: Icon }) => {
+                const active = themeMode === mode;
+
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setThemeMode(mode)}
+                    className={`flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
+                      active
+                        ? "bg-white text-navy"
+                        : "text-white/65 hover:bg-white/10 hover:text-white"
+                    }`}
+                    title={label}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="sr-only">{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
       <div className="border-t border-white/10">

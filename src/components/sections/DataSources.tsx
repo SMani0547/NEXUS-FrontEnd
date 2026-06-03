@@ -1,4 +1,17 @@
-import { Database, FileSpreadsheet, Info } from "lucide-react";
+import { Database, ExternalLink, FileSpreadsheet, Info } from "lucide-react";
+
+const dataSourceLinks = [
+  {
+    name: "Crop Yield - Disaggregated",
+    desc: "Crop production data by country, product, and year.",
+    href: "https://stats.pacificdata.org/vis?lc=en&df[ds]=SPC2&df[id]=DF_AGRICULTURAL_PRODUCTION&df[ag]=SPC&df[vs]=1.0&av=true&dq=A...&pd=,&to[TIME_PERIOD]=false",
+  },
+  {
+    name: "Livestock Yield - Disaggregated",
+    desc: "Livestock head counts and yields across the region.",
+    href: "https://stats.pacificdata.org/vis?lc=en&df[ds]=SPC2&df[id]=DF_AGRICULTURAL_PRODUCTION&df[ag]=SPC&df[vs]=1.0&av=true&dq=A...&pd=,&to[TIME_PERIOD]=false",
+  },
+];
 
 export function DataSources() {
   return (
@@ -26,15 +39,21 @@ export function DataSources() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { name: "Crop Yield — Disaggregated", desc: "Crop production data by country, product, and year." },
-                { name: "Livestock Yield — Disaggregated", desc: "Livestock head counts and yields across the region." },
-              ].map((d) => (
-                <div key={d.name} className="rounded-xl border border-border p-5 bg-background/50">
-                  <FileSpreadsheet className="w-5 h-5 text-accent mb-3" />
+              {dataSourceLinks.map((d) => (
+                <a
+                  key={d.name}
+                  href={d.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-xl border border-border p-5 bg-background/50 transition-all hover:-translate-y-0.5 hover:border-accent/50 hover:bg-background hover:shadow-card"
+                >
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <FileSpreadsheet className="w-5 h-5 text-accent" />
+                    <ExternalLink className="w-4 h-4 text-muted-foreground transition-colors group-hover:text-accent" />
+                  </div>
                   <div className="font-semibold text-sm mb-1">{d.name}</div>
                   <div className="text-xs text-muted-foreground">{d.desc}</div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -45,10 +64,10 @@ export function DataSources() {
               <Info className="w-5 h-5 text-teal mb-4" />
               <h3 className="font-display text-xl font-semibold mb-4">Data Notes</h3>
               <ul className="space-y-3 text-sm text-white/80">
-                <li className="flex gap-2"><span className="text-teal">·</span> Not every country reports every product.</li>
-                <li className="flex gap-2"><span className="text-teal">·</span> Not every product exists in every country.</li>
-                <li className="flex gap-2"><span className="text-teal">·</span> Missing values are handled gracefully.</li>
-                <li className="flex gap-2"><span className="text-teal">·</span> Data availability varies by year.</li>
+                <li className="flex gap-2"><span className="text-teal">-</span> Not every country reports every product.</li>
+                <li className="flex gap-2"><span className="text-teal">-</span> Not every product exists in every country.</li>
+                <li className="flex gap-2"><span className="text-teal">-</span> Missing values are handled gracefully.</li>
+                <li className="flex gap-2"><span className="text-teal">-</span> Data availability varies by year.</li>
               </ul>
             </div>
           </div>

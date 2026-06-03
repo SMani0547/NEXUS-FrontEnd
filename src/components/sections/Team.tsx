@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 function LinkedinLogo({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
@@ -84,6 +86,25 @@ const colors = [
 ];
 
 export function Team() {
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  const toggleCardForTouch = (name: string) => {
+    const isTouchLike =
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: none), (pointer: coarse)").matches;
+
+    if (!isTouchLike) return;
+    setActiveCard((current) => (current === name ? null : name));
+  };
+
+  useEffect(() => {
+    if (!activeCard) return;
+
+    const resetActiveCard = () => setActiveCard(null);
+    window.addEventListener("scroll", resetActiveCard, { passive: true });
+    return () => window.removeEventListener("scroll", resetActiveCard);
+  }, [activeCard]);
+
   return (
     <section id="team" className="relative py-24 bg-background scroll-mt-20">
       <div className="max-w-7xl mx-auto px-6">
@@ -97,59 +118,91 @@ export function Team() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {team.map((m, i) => (
+        <div className="mx-auto grid max-w-6xl sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {team.map((m, i) => {
+            const isActive = activeCard === m.name;
+
+            return (
             <div
               key={m.name}
-              className="group bg-card rounded-2xl p-6 border border-border shadow-card hover:shadow-elegant transition-all hover:-translate-y-1"
+              className="group relative pt-7 [perspective:1200px]"
+              onClick={() => toggleCardForTouch(m.name)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  toggleCardForTouch(m.name);
+                }
+              }}
+              tabIndex={0}
             >
               <div
-                className={`w-full aspect-[4/3] rounded-xl bg-gradient-to-br ${colors[i]} mb-5 relative overflow-hidden`}
+                className={`relative h-full rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:rotateX(0deg)_translateY(0)] group-hover:shadow-elegant group-hover:[transform:rotateX(52deg)_translateY(12px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "shadow-elegant [transform:rotateX(52deg)_translateY(12px)]" : ""}`}
               >
-                {m.photo ? (
-                  <img
-                    src={m.photo}
-                    alt={m.name}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-white font-display text-6xl font-bold opacity-90">
-                    {m.name
-                      .split(" ")
-                      .map((p) => p[0])
-                      .join("")}
+                <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${isActive ? "opacity-100" : ""}`} />
+
+                <div
+                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] group-hover:z-20 group-hover:[transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)] group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)]" : ""}`}
+                >
+                  <div className="absolute inset-0 overflow-hidden rounded-xl">
+                    {m.photo ? (
+                      <img
+                        src={m.photo}
+                        alt={m.name}
+                        className="h-full w-full object-cover object-center transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-white font-display text-6xl font-bold opacity-90">
+                        {m.name
+                          .split(" ")
+                          .map((p) => p[0])
+                          .join("")}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/35 via-transparent to-white/10" />
                   </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              </div>
-              <h3 className="font-display text-lg font-semibold">{m.name}</h3>
-              <p className="mb-3 text-sm font-medium text-accent">{m.role}</p>
-              <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                {m.bio}
-              </p>
-              <div className="flex gap-2">
-                <a
-                  href={m.linkedin ?? "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${m.name} LinkedIn`}
-                  className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0A66C2] text-white transition-colors hover:bg-[#0A66C2]/15 hover:text-[#0A66C2]"
+                </div>
+
+                <div className={`relative transition-transform duration-500 ease-out [transform:translateZ(0)] group-hover:[transform:translateZ(34px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(34px)]" : ""}`}>
+                  <h3 className="font-display text-lg font-semibold">{m.name}</h3>
+                  <p className="mb-3 text-sm font-medium text-accent">{m.role}</p>
+                  <p className="mb-4 min-h-14 text-sm leading-relaxed text-muted-foreground">
+                    {m.bio}
+                  </p>
+                </div>
+
+                <div className={`relative flex gap-2 transition-transform duration-500 ease-out [transform:translateZ(0)] group-hover:[transform:translateZ(46px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(46px)]" : ""}`}>
+                  <a
+                    href={m.linkedin ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${m.name} LinkedIn`}
+                    className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0A66C2] text-white transition-colors hover:bg-[#0A66C2]/15 hover:text-[#0A66C2]"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <LinkedinLogo className="h-4 w-4" />
+                  </a>
+                  <a
+                    href={m.github ?? "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${m.name} GitHub`}
+                    className="flex h-8 w-8 items-center justify-center rounded-md bg-[#181717] text-white transition-colors hover:bg-[#181717]/15 hover:text-[#181717] dark:hover:bg-white/20 dark:hover:text-white"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <GithubLogo className="h-4 w-4" />
+                  </a>
+                </div>
+
+                <div
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute inset-x-8 bottom-0 h-8 rounded-full bg-primary/15 blur-2xl transition-all duration-500 group-hover:translate-y-5 group-hover:scale-110 group-hover:bg-primary/25 ${isActive ? "translate-y-5 scale-110 bg-primary/25" : ""}`}
                 >
-                  <LinkedinLogo className="h-4 w-4" />
-                </a>
-                <a
-                  href={m.github ?? "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${m.name} GitHub`}
-                  className="flex h-8 w-8 items-center justify-center rounded-md bg-[#181717] text-white transition-colors hover:bg-[#181717]/15 hover:text-[#181717] dark:hover:bg-white/20 dark:hover:text-white"
-                >
-                  <GithubLogo className="h-4 w-4" />
-                </a>
+                </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

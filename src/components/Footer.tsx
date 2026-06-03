@@ -40,7 +40,7 @@ export function Footer() {
             Connecting Pacific Agriculture, Climate, and Data. Built for the
             Pacific Dataviz Challenge 2026.
           </p>
-         
+
           <div className="mt-7 grid gap-3 sm:grid-cols-2">
             {githubProjects.map((project) => (
               <a
@@ -97,13 +97,7 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href="#" className="inline-flex items-center gap-2 hover:text-white">
-                <FiBookOpen className="w-3.5 h-3.5" />
-                Documentation
-              </a>
-            </li>
-            <li>
-              <a href="#" className="inline-flex items-center gap-2 hover:text-white">
+              <a href="https://nexus-backend.shivafj.dev" className="inline-flex items-center gap-2 hover:text-white">
                 <FiCode className="w-3.5 h-3.5" />
                 API Reference
               </a>

@@ -112,6 +112,7 @@ export type InsightsResponse = {
 export type AskResponse = {
   answer: string;
   note: string;
+  suggested_questions: string[];
   data_context: Record<string, unknown> | null;
 };
 

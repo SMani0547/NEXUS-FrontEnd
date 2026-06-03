@@ -29,6 +29,7 @@ function AIPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [suggestions, setSuggestions] = useState(SUGGESTIONS);
   const askMutation = useAskMutation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -48,6 +49,9 @@ function AIPage() {
     try {
       const response = await askMutation.mutateAsync(q);
       setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: response.answer }]);
+      if (response.suggested_questions.length > 0) {
+        setSuggestions(response.suggested_questions);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "The backend could not answer right now.";
       setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: message }]);
@@ -78,7 +82,7 @@ function AIPage() {
                 <span className="font-display font-semibold text-sm">Suggested Questions</span>
               </div>
               <div className="space-y-2">
-                {SUGGESTIONS.map((s) => (
+                {suggestions.map((s) => (
                   <button
                     key={s}
                     onClick={() => send(s)}

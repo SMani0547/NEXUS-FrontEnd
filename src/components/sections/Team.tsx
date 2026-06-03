@@ -26,7 +26,7 @@ type TeamMember = {
 const team: TeamMember[] = [
   {
     name: "Abhishek Swamy",
-    role: "Project Lead",
+    role: "Project Lead / Predictive Architect",
     bio: "Drives product strategy, timelines, and cross-functional alignment between engineering, data, and research.",
     photo: "/abhishek.jpg",
     linkedin: "https://www.linkedin.com/in/abhishek-swamy-983b86217/",
@@ -34,7 +34,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Shiva Goundar",
-    role: "System Architect",
+    role: "Data & Infrastructure Architect",
     bio: "Architects and implements the backend infrastructure, secure data engineering pipelines, and core APIs.",
     photo: "/shiva.jpg",
     linkedin: "https://www.linkedin.com/in/shiva-goundar-270a901b9/",
@@ -42,7 +42,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Shainesh Nand",
-    role: "System Architect",
+    role: "UI/UX Systems Architect",
     bio: "Architects and implements the user interface framework, high-performance visual layers, and client-side systems.",
     photo: "/shainesh.jpg",
     linkedin: "https://www.linkedin.com/in/shainesh-nand-80a954313/",
@@ -50,7 +50,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Pranshu Nadan",
-    role: "Data Analyst",
+    role: "AgTech Data Analyst",
     bio: "Extracts, models, and analyzes agricultural datasets to uncover key patterns and statistical trends.",
     photo: "/Pranshu.jpg",
     linkedin: "#",
@@ -58,7 +58,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Parth Badgujar",
-    role: "Data Analyst",
+    role: "Climate Data Analyst",
     bio: "Analyzes climate data models to quantify impacts on food security and human environmental systems.",
     photo: "/parth.jpg",
     linkedin: "https://www.linkedin.com/in/parth-badgujar-6a255a2a6/",
@@ -66,7 +66,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Pranav Kumar",
-    role: "Research & Storytelling",
+    role: "Generative AI Engineer",
     bio: "Engineers the Nexus AI conversational layer, contextual intelligence models, and text-based data narratives.",
     photo: "/pranav.jpg",
     linkedin: "https://www.linkedin.com/in/pranav-kumar-16b950260/",

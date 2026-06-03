@@ -141,7 +141,7 @@ export function Team() {
                 <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 [@media(hover:hover)]:group-hover:opacity-100 ${isActive ? "opacity-100" : ""}`} />
 
                 <div
-                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-origin:center_bottom] [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] [@media(hover:hover)]:group-hover:z-20 [@media(hover:hover)]:group-hover:[transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)] [@media(hover:hover)]:group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(34px)_rotateX(-10deg)_scale(1)]" : ""}`}
+                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-origin:center_bottom] [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] [@media(hover:hover)]:group-hover:z-20 [@media(hover:hover)]:group-hover:[transform:translateZ(58px)_rotateX(-32deg)_scale(1.02)] [@media(hover:hover)]:group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(34px)_rotateX(-32deg)_scale(1)]" : ""}`}
                 >
                   <div className="absolute inset-0 rounded-xl">
                     {m.photo ? (

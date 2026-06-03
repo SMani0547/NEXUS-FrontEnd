@@ -50,7 +50,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Pranshu Nadan",
-    role: "AgTech Data Analyst",
+    role: "Agricultural Data Analyst",
     bio: "Extracts, models, and analyzes agricultural datasets to uncover key patterns and statistical trends.",
     photo: "/Pranshu.jpg",
     linkedin: "#",

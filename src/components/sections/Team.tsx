@@ -136,23 +136,23 @@ export function Team() {
               tabIndex={0}
             >
               <div
-                className={`relative h-full rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:rotateX(0deg)_translateY(0)] group-hover:shadow-elegant group-hover:[transform:rotateX(52deg)_translateY(12px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "shadow-elegant [transform:rotateX(52deg)_translateY(12px)]" : ""}`}
+                className={`relative h-full rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:rotateX(0deg)_translateY(0)] [@media(hover:hover)]:group-hover:shadow-elegant [@media(hover:hover)]:group-hover:[transform:rotateX(52deg)_translateY(12px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "shadow-elegant [transform:rotateX(34deg)_translateY(6px)]" : ""}`}
               >
-                <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${isActive ? "opacity-100" : ""}`} />
+                <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 [@media(hover:hover)]:group-hover:opacity-100 ${isActive ? "opacity-100" : ""}`} />
 
                 <div
-                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] group-hover:z-20 group-hover:[transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)] group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)]" : ""}`}
+                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-origin:center_bottom] [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] [@media(hover:hover)]:group-hover:z-20 [@media(hover:hover)]:group-hover:[transform:translateZ(96px)_rotateX(-28deg)_scale(1.04)] [@media(hover:hover)]:group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(34px)_rotateX(-10deg)_scale(1)]" : ""}`}
                 >
-                  <div className="absolute inset-0 overflow-hidden rounded-xl">
+                  <div className="absolute inset-0 rounded-xl">
                     {m.photo ? (
                       <img
                         src={m.photo}
                         alt={m.name}
-                        className="h-full w-full object-cover object-center transition-transform duration-500"
+                        className="absolute inset-0 h-full w-full rounded-xl object-cover object-center transition-transform duration-500"
                         loading="lazy"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-white font-display text-6xl font-bold opacity-90">
+                      <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-xl text-white font-display text-6xl font-bold opacity-90">
                         {m.name
                           .split(" ")
                           .map((p) => p[0])
@@ -163,7 +163,7 @@ export function Team() {
                   </div>
                 </div>
 
-                <div className={`relative transition-transform duration-500 ease-out [transform:translateZ(0)] group-hover:[transform:translateZ(34px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(34px)]" : ""}`}>
+                <div className={`relative transition-transform duration-500 ease-out [transform:translateZ(0)] [@media(hover:hover)]:group-hover:[transform:translateZ(34px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(20px)]" : ""}`}>
                   <h3 className="font-display text-lg font-semibold">{m.name}</h3>
                   <p className="mb-3 text-sm font-medium text-accent">{m.role}</p>
                   <p className="mb-4 min-h-14 text-sm leading-relaxed text-muted-foreground">
@@ -171,7 +171,7 @@ export function Team() {
                   </p>
                 </div>
 
-                <div className={`relative flex gap-2 transition-transform duration-500 ease-out [transform:translateZ(0)] group-hover:[transform:translateZ(46px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(46px)]" : ""}`}>
+                <div className={`relative flex gap-2 transition-transform duration-500 ease-out [transform:translateZ(0)] [@media(hover:hover)]:group-hover:[transform:translateZ(46px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(26px)]" : ""}`}>
                   <a
                     href={m.linkedin ?? "#"}
                     target="_blank"
@@ -196,7 +196,7 @@ export function Team() {
 
                 <div
                   aria-hidden="true"
-                  className={`pointer-events-none absolute inset-x-8 bottom-0 h-8 rounded-full bg-primary/15 blur-2xl transition-all duration-500 group-hover:translate-y-5 group-hover:scale-110 group-hover:bg-primary/25 ${isActive ? "translate-y-5 scale-110 bg-primary/25" : ""}`}
+                  className={`pointer-events-none absolute inset-x-8 bottom-0 h-8 rounded-full bg-primary/15 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:translate-y-5 [@media(hover:hover)]:group-hover:scale-110 [@media(hover:hover)]:group-hover:bg-primary/25 ${isActive ? "translate-y-5 scale-110 bg-primary/25" : ""}`}
                 >
                 </div>
               </div>

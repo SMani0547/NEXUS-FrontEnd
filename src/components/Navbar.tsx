@@ -62,14 +62,15 @@ export function Navbar() {
   }, [activeKey, showSlidingPill]);
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <>
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-background/80 backdrop-blur-xl border-b border-border"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <img
             src="/logo.png"
@@ -145,44 +146,76 @@ export function Navbar() {
             </Button>
           </Link>
           <button
-            className="lg:hidden p-2"
+            className={`lg:hidden rounded-md p-2 transition-colors ${
+              heroTransparentMode
+                ? "text-white hover:bg-white/10"
+                : "text-foreground hover:bg-accent/10"
+            }`}
             onClick={() => setOpen(!open)}
             aria-label="menu"
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-      </div>
-
-      {open && (
-        <div className="lg:hidden bg-background border-t border-border">
-          <nav className="max-w-7xl mx-auto px-6 py-3 grid grid-cols-2 gap-1">
-            {navItems.map((item) => {
-              const id = item.hash.replace("#", "");
-              return (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  hash={id || undefined}
-                  onClick={(e) => {
-                    setOpen(false);
-                    if (id && pathname === item.to) {
-                      e.preventDefault();
-                      setTimeout(() => {
-                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                        history.replaceState(null, "", `${item.to}#${id}`);
-                      }, 0);
-                    }
-                  }}
-                  className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
         </div>
-      )}
-    </header>
+      </header>
+
+      <div
+        className={`fixed inset-0 z-[60] transition-opacity duration-300 ease-out lg:hidden ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/35 backdrop-blur-[2px]"
+            aria-label="close menu"
+            onClick={() => setOpen(false)}
+          />
+          <aside
+            className={`absolute right-0 top-0 h-dvh w-[min(82vw,22rem)] bg-background shadow-elegant transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              open ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="flex h-16 items-center justify-between border-b border-border px-6">
+              <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+                <img src="/logo.png" alt="NEXUS" className="h-12 w-12 object-contain" />
+                <span className="font-display text-lg font-bold text-foreground">NEXUS</span>
+              </Link>
+              <button
+                className="rounded-md p-2 text-foreground transition-colors hover:bg-accent/10"
+                onClick={() => setOpen(false)}
+                aria-label="close menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <nav className="grid gap-1 px-4 py-5">
+              {navItems.map((item) => {
+                const id = item.hash.replace("#", "");
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    hash={id || undefined}
+                    onClick={(e) => {
+                      setOpen(false);
+                      if (id && pathname === item.to) {
+                        e.preventDefault();
+                        setTimeout(() => {
+                          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          history.replaceState(null, "", `${item.to}#${id}`);
+                        }, 0);
+                      }
+                    }}
+                    className="rounded-md px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/10 hover:text-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+        </div>
+    </>
   );
 }

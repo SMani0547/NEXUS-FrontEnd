@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { COUNTRIES, DATASET, YEARS } from "@/lib/mock-data";
+import { useEffect, useMemo, useState } from "react";
 import { TrendingUp, TrendingDown, MapPin, X } from "lucide-react";
+import { useCountriesQuery, useCountryProfileQuery } from "@/hooks/useNexusApi";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
@@ -35,26 +35,42 @@ const PLACES: Record<string, { x: number; y: number; size?: number }> = {
 function MapPage() {
   const [selected, setSelected] = useState<string | null>("Fiji");
   const [hover, setHover] = useState<string | null>(null);
+  const countriesQuery = useCountriesQuery();
+  const profileQuery = useCountryProfileQuery(selected);
+  const countries = useMemo(
+    () => (countriesQuery.data ?? []).filter((country) => PLACES[country]),
+    [countriesQuery.data],
+  );
+
+  useEffect(() => {
+    if (!selected && countries.includes("Fiji")) {
+      setSelected("Fiji");
+    } else if (selected && countries.length && !countries.includes(selected)) {
+      setSelected(countries[0]);
+    }
+  }, [countries, selected]);
 
   const summary = useMemo(() => {
-    if (!selected) return null;
-    const rows = DATASET.filter((r) => r.country === selected);
-    if (!rows.length) return null;
-    const products = Array.from(new Set(rows.map((r) => r.product)));
-    const lastY = YEARS[YEARS.length - 1];
-    const firstY = YEARS[0];
-    const latest = rows.filter((r) => r.year === lastY);
-    const earliest = rows.filter((r) => r.year === firstY);
-    const latestAvg = latest.length ? latest.reduce((s, r) => s + r.yield, 0) / latest.length : 0;
-    const earliestAvg = earliest.length ? earliest.reduce((s, r) => s + r.yield, 0) / earliest.length : latestAvg;
-    const growth = earliestAvg ? ((latestAvg - earliestAvg) / earliestAvg) * 100 : 0;
+    const profile = profileQuery.data;
+    if (!selected || !profile) return null;
+    const products = [...profile.available_crop_products, ...profile.available_livestock_products];
+    const latestValues = profile.latest_values.filter((item) => item.value != null);
+    const latest = latestValues.length
+      ? latestValues.reduce((sum, item) => sum + (item.value ?? 0), 0) / latestValues.length
+      : 0;
+    const growthValues = profile.trend_summaries
+      .map((item) => item.change_percent)
+      .filter((value): value is number => value != null);
+    const growth = growthValues.length
+      ? growthValues.reduce((sum, value) => sum + value, 0) / growthValues.length
+      : 0;
     return {
       products,
-      latest: Math.round(latestAvg),
+      latest: Math.round(latest),
       growth,
-      yearsCount: new Set(rows.map((r) => r.year)).size,
+      yearsCount: profile.years_available.length,
     };
-  }, [selected]);
+  }, [profileQuery.data, selected]);
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
@@ -86,7 +102,7 @@ function MapPage() {
               ))}
 
               {/* Connection lines */}
-              {selected && PLACES[selected] && COUNTRIES.map((c) => {
+              {selected && PLACES[selected] && countries.map((c) => {
                 if (c === selected || !PLACES[c]) return null;
                 const a = PLACES[selected];
                 const b = PLACES[c];
@@ -99,7 +115,7 @@ function MapPage() {
                 );
               })}
 
-              {COUNTRIES.map((c) => {
+              {countries.map((c) => {
                 const p = PLACES[c];
                 if (!p) return null;
                 const isSelected = selected === c;
@@ -142,7 +158,7 @@ function MapPage() {
             </div>
             <div className="absolute top-4 right-4 flex gap-2">
               <div className="px-3 py-1.5 rounded-md bg-white/10 backdrop-blur-md border border-white/10 text-white/80 text-xs">
-                {COUNTRIES.length} countries
+                {countriesQuery.isLoading ? "Loading" : countries.length} countries
               </div>
             </div>
           </div>

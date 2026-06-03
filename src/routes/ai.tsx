@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Send, Sparkles, User, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAskMutation } from "@/hooks/useNexusApi";
 
 export const Route = createFileRoute("/ai")({
   head: () => ({
     meta: [
-      { title: "Nexus AI — Ask Questions About Pacific Data" },
+      { title: "Nexus AI - Ask Questions About Pacific Data" },
       { name: "description", content: "Chat with Nexus AI to explore Pacific crop and livestock yield data through natural language." },
     ],
   }),
@@ -24,27 +25,11 @@ const SUGGESTIONS = [
 
 type Message = { id: string; role: "user" | "assistant"; content: string };
 
-function mockReply(q: string): string {
-  const lower = q.toLowerCase();
-  if (lower.includes("fiji") && lower.includes("samoa"))
-    return "Across the available years, **Fiji** shows a broader product mix and higher absolute yields than **Samoa**, while Samoa's per-product yields are remarkably consistent. Samoa shows steadier growth (+18%) while Fiji's curve is more volatile (+24% overall with sharper year-on-year swings).";
-  if (lower.includes("fiji"))
-    return "Fiji's crop yields have trended **upward over the last two decades**, with notable accelerations in taro and cassava production. The data suggests a roughly +24% average yield increase since 2000, with brief dips around climate-stress years.";
-  if (lower.includes("highest livestock"))
-    return "**Papua New Guinea**, **Fiji**, and **Vanuatu** lead the region for livestock yield in the most recent reporting year, driven primarily by pigs and poultry.";
-  if (lower.includes("trend"))
-    return "Three Pacific-wide patterns emerge: (1) **steady but uneven growth** in root crops, (2) **livestock intensification** in larger island states, and (3) **rising volatility** in coastal-exposed economies.";
-  if (lower.includes("strongest growth") || lower.includes("growth"))
-    return "**Vanilla**, **kava**, and **poultry** show the strongest sustained growth across the dataset — each more than doubling its average reported yield since 2000.";
-  if (lower.includes("diverse") || lower.includes("diversity"))
-    return "**Papua New Guinea** and **Fiji** report the broadest product diversity (12+ distinct products), while smaller territories typically focus on 3–5 staple crops.";
-  return "Based on the official Pacific Dataviz Challenge datasets, that's a question I can explore — try one of the suggested prompts on the left, or ask about a specific country, product, or time range.";
-}
-
 function AIPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const askMutation = useAskMutation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -53,18 +38,23 @@ function AIPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const q = text.trim();
-    if (!q) return;
-    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: q };
-    setMessages((m) => [...m, userMsg]);
+    if (!q || typing) return;
+    setMessages((m) => [...m, { id: crypto.randomUUID(), role: "user", content: q }]);
     setInput("");
     setTyping(true);
-    setTimeout(() => {
-      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: mockReply(q) }]);
+
+    try {
+      const response = await askMutation.mutateAsync(q);
+      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: response.answer }]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "The backend could not answer right now.";
+      setMessages((m) => [...m, { id: crypto.randomUUID(), role: "assistant", content: message }]);
+    } finally {
       setTyping(false);
       setTimeout(() => inputRef.current?.focus(), 0);
-    }, 900 + Math.random() * 700);
+    }
   };
 
   return (
@@ -81,7 +71,6 @@ function AIPage() {
         </div>
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-6">
-          {/* Suggestions */}
           <aside className="space-y-3">
             <div className="bg-card border border-border rounded-2xl p-5 shadow-card">
               <div className="flex items-center gap-2 mb-4">
@@ -93,7 +82,8 @@ function AIPage() {
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="w-full text-left text-xs p-3 rounded-lg bg-muted/50 hover:bg-accent/10 hover:text-accent transition-colors border border-transparent hover:border-accent/30"
+                    disabled={typing}
+                    className="w-full text-left text-xs p-3 rounded-lg bg-muted/50 hover:bg-accent/10 hover:text-accent transition-colors border border-transparent hover:border-accent/30 disabled:opacity-60"
                   >
                     {s}
                   </button>
@@ -101,11 +91,10 @@ function AIPage() {
               </div>
             </div>
             <div className="text-xs text-muted-foreground px-2 leading-relaxed">
-              Answers are generated from the official datasets available within Nexus.
+              Answers are generated from the backend dataset context.
             </div>
           </aside>
 
-          {/* Chat */}
           <div className="bg-card border border-border rounded-2xl shadow-card flex flex-col h-[640px]">
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6">
               {messages.length === 0 && (
@@ -115,7 +104,7 @@ function AIPage() {
                   </div>
                   <h3 className="font-display text-2xl font-semibold mb-2">Nexus AI</h3>
                   <p className="text-muted-foreground max-w-md text-sm">
-                    Ask about Pacific agriculture — countries, products, time ranges, trends, comparisons. I'll answer from the datasets.
+                    Ask about Pacific agriculture: countries, products, time ranges, trends, and comparisons.
                   </p>
                 </div>
               )}
@@ -128,14 +117,16 @@ function AIPage() {
                     {m.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                   </div>
                   <div className={`max-w-[80%] ${m.role === "user" ? "text-right" : ""}`}>
-                    <div className={`inline-block px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                      m.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-tr-sm"
-                        : "bg-muted text-foreground rounded-tl-sm"
-                    }`}
-                    dangerouslySetInnerHTML={{
-                      __html: m.content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'),
-                    }} />
+                    <div
+                      className={`inline-block px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                        m.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-tr-sm"
+                          : "bg-muted text-foreground rounded-tl-sm"
+                      }`}
+                      dangerouslySetInnerHTML={{
+                        __html: m.content.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"),
+                      }}
+                    />
                   </div>
                 </div>
               ))}
@@ -174,7 +165,7 @@ function AIPage() {
                       send(input);
                     }
                   }}
-                  placeholder="Ask about Pacific yields, countries, products…"
+                  placeholder="Ask about Pacific yields, countries, products..."
                   className="flex-1 resize-none bg-background border border-input rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring max-h-32"
                 />
                 <Button type="submit" disabled={!input.trim() || typing} className="bg-gradient-ocean text-white border-0 h-11 w-11 p-0 shadow-glow disabled:opacity-50">

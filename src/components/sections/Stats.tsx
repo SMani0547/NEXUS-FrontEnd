@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Globe2, Sprout, Calendar, Database } from "lucide-react";
-import { STATS } from "@/lib/mock-data";
+import { useSummaryQuery } from "@/hooks/useNexusApi";
 
 function useCountUp(target: number, duration = 1500, start = false) {
   const [value, setValue] = useState(0);
@@ -55,11 +55,12 @@ function StatCard({
 }
 
 export function Stats() {
+  const { data, isLoading } = useSummaryQuery();
   const items = [
-    { icon: Globe2, label: "Countries Covered", value: STATS.countries, description: "Pacific Island countries and territories tracked." },
-    { icon: Sprout, label: "Products Tracked", value: STATS.products, description: "Crops and livestock across the region." },
-    { icon: Calendar, label: "Years Available", value: STATS.years, description: "Years of historical yield data." },
-    { icon: Database, label: "Total Records", value: STATS.records, description: "Disaggregated data points analyzed." },
+    { icon: Globe2, label: "Countries Covered", value: data?.total_countries ?? 0, description: "Pacific Island countries and territories tracked." },
+    { icon: Sprout, label: "Products Tracked", value: data?.total_products ?? 0, description: "Crops and livestock across the region." },
+    { icon: Calendar, label: "Years Available", value: data?.total_years ?? 0, description: "Years of historical yield data." },
+    { icon: Database, label: "Total Records", value: data?.total_records ?? 0, description: "Disaggregated data points analyzed." },
   ];
   return (
     <section className="relative py-24 bg-background">
@@ -71,6 +72,9 @@ export function Stats() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((it) => <StatCard key={it.label} {...it} />)}
         </div>
+        {isLoading && (
+          <p className="mt-6 text-center text-sm text-muted-foreground">Loading live dataset summary...</p>
+        )}
       </div>
     </section>
   );

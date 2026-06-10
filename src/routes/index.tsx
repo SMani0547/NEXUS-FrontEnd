@@ -41,9 +41,10 @@ function Index() {
     <>
       {/* Global scoped CSS for this page */}
       <style>{`
-        /* Force dark background throughout — no theme flash */
+        /* Let the shared app theme control the page background */
         body {
-          background-color: #03001C;
+          background-color: var(--color-background);
+          color: var(--color-foreground);
         }
 
         /* Smooth scrolling */
@@ -53,8 +54,8 @@ function Index() {
 
         /* Nexus custom selection color */
         ::selection {
-          background: rgba(0, 255, 209, 0.25);
-          color: #00FFD1;
+          background: color-mix(in oklab, var(--color-accent) 25%, transparent);
+          color: var(--color-accent);
         }
 
         /* Custom scrollbar */
@@ -62,14 +63,14 @@ function Index() {
           width: 6px;
         }
         ::-webkit-scrollbar-track {
-          background: #03001C;
+          background: var(--color-background);
         }
         ::-webkit-scrollbar-thumb {
-          background: rgba(0, 255, 209, 0.3);
+          background: var(--color-border);
           border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 255, 209, 0.6);
+          background: var(--color-muted-foreground);
         }
 
         /* Orbitron fallback chain */

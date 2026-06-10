@@ -37,8 +37,8 @@ function AgricultureGraphic({ active }: { active: boolean }) {
         const y = 185 - (v / max) * 150;
         return (
           <g key={v}>
-            <line x1="30" y1={y} x2="350" y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-            <text x="22" y={y + 4} textAnchor="end" fontSize="9" fill="rgba(255,255,255,0.25)" fontFamily="monospace">{v}</text>
+            <line x1="30" y1={y} x2="350" y2={y} stroke="var(--home-divider)" strokeWidth="1" />
+            <text x="22" y={y + 4} textAnchor="end" fontSize="9" fill="var(--home-copy-muted)" fontFamily="monospace">{v}</text>
           </g>
         );
       })}
@@ -59,7 +59,7 @@ function AgricultureGraphic({ active }: { active: boolean }) {
                 filter: `drop-shadow(0 0 6px ${i % 2 === 0 ? "#00FFD1" : "#7B2FFF"}60)`,
               }}
             />
-            <text x={x + barW / 2} y="200" textAnchor="middle" fontSize="8" fill="rgba(255,255,255,0.4)" fontFamily="monospace">
+            <text x={x + barW / 2} y="200" textAnchor="middle" fontSize="8" fill="var(--home-copy-muted)" fontFamily="monospace">
               {countries[i]}
             </text>
           </g>
@@ -126,22 +126,22 @@ function ClimateGraphic({ active }: { active: boolean }) {
       />
 
       {/* Axis */}
-      <line x1="22" y1="190" x2="338" y2="190" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+      <line x1="22" y1="190" x2="338" y2="190" stroke="var(--home-divider)" strokeWidth="1" />
 
       {/* Year labels */}
       {[1985, 2000, 2015, 2025].map((yr) => {
         const i = yr - 1985;
         return (
-          <text key={yr} x={22 + i * 8} y="205" fontSize="9" fill="rgba(255,255,255,0.25)" fontFamily="monospace">{yr}</text>
+          <text key={yr} x={22 + i * 8} y="205" fontSize="9" fill="var(--home-copy-muted)" fontFamily="monospace">{yr}</text>
         );
       })}
 
       {/* Legend */}
       <g>
         <rect x="240" y="10" width="8" height="8" rx="1" fill="#00FFD1" />
-        <text x="252" y="18" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="monospace">Pre-stress yield</text>
+        <text x="252" y="18" fontSize="9" fill="var(--home-copy-soft)" fontFamily="monospace">Pre-stress yield</text>
         <rect x="240" y="24" width="8" height="8" rx="1" fill="#FF2D6B" />
-        <text x="252" y="32" fontSize="9" fill="rgba(255,255,255,0.5)" fontFamily="monospace">Climate-affected</text>
+        <text x="252" y="32" fontSize="9" fill="var(--home-copy-soft)" fontFamily="monospace">Climate-affected</text>
       </g>
     </svg>
   );
@@ -269,13 +269,13 @@ function StoryBlock({ block, index }: { block: typeof blocks[0]; index: number }
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-            color: "#fff",
+            color: "var(--foreground)",
           }}
         >
           {block.title}
         </h3>
 
-        <p className="leading-relaxed text-sm" style={{ color: "rgba(255,255,255,0.5)", fontFamily: "'Space Grotesk', sans-serif" }}>
+        <p className="leading-relaxed text-sm" style={{ color: "var(--home-copy-soft)", fontFamily: "'Space Grotesk', sans-serif" }}>
           {block.body}
         </p>
       </div>
@@ -285,7 +285,7 @@ function StoryBlock({ block, index }: { block: typeof blocks[0]; index: number }
         <div
           className="absolute inset-0 rounded-xl overflow-hidden"
           style={{
-            background: "linear-gradient(135deg, rgba(26,10,74,0.9) 0%, rgba(3,0,28,0.95) 100%)",
+            background: "var(--home-panel-strong-bg)",
             border: `1px solid ${block.color}25`,
             boxShadow: `0 0 40px ${block.color}10`,
           }}
@@ -309,11 +309,11 @@ function StoryBlock({ block, index }: { block: typeof blocks[0]; index: number }
 export function Story() {
   return (
     <section id="story" className="relative py-24 overflow-hidden scroll-mt-20"
-      style={{ background: "#03001C" }}>
+      style={{ background: "var(--home-section-bg)" }}>
 
       {/* Vertical timeline line */}
       <div className="absolute left-1/2 top-40 bottom-20 w-px hidden md:block pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,255,209,0.1) 20%, rgba(0,255,209,0.1) 80%, transparent)" }}
+        style={{ background: "linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-accent) 30%, transparent) 20%, color-mix(in oklab, var(--color-accent) 30%, transparent) 80%, transparent)" }}
       />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -326,14 +326,14 @@ export function Story() {
             style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
-              color: "#ffffff",
+              color: "var(--foreground)",
             }}
           >
             THE STORY BEHIND
             <br />
             <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>THE DATA</span>
           </h2>
-          <p className="text-lg font-light" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          <p className="text-lg font-light" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
             Why Pacific agriculture matters — and what the numbers reveal.
           </p>
         </div>

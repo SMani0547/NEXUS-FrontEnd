@@ -427,7 +427,7 @@ function HexGrid() {
   }
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.045]"
+    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.08] dark:opacity-[0.045]"
       preserveAspectRatio="xMidYMid slice">
       {hexes.map((h) => (
         <path key={h.id} d={hexPath(h.x, h.y)}
@@ -440,7 +440,7 @@ function HexGrid() {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#03001C] text-white pt-16">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-background text-foreground dark:bg-[#03001C] dark:text-white pt-16">
       <HexGrid />
       <ParticleField />
 
@@ -450,7 +450,7 @@ export function Hero() {
 
       {/* Violet ambient glow left */}
       <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] pointer-events-none rounded-full"
-        style={{ background: "radial-gradient(circle,rgba(123,47,255,0.14) 0%,transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle,var(--home-violet-glow) 0%,transparent 70%)" }} />
 
       {/* Globe — positioned right side */}
       <div className="absolute right-[-6%] xl:right-[1%] top-1/2 -translate-y-1/2
@@ -470,7 +470,7 @@ export function Hero() {
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FFD1] animate-pulse" />
           </div>
 
-          <div className="mb-2 font-mono text-xs tracking-[0.4em] text-white/30 uppercase">
+          <div className="mb-2 font-mono text-xs tracking-[0.4em] uppercase" style={{ color: "var(--home-copy-muted)" }}>
             Agricultural Intelligence Platform
           </div>
 
@@ -486,11 +486,11 @@ export function Hero() {
           </h1>
 
           <p className="text-xl md:text-2xl font-light mb-3"
-            style={{ color: "rgba(255,255,255,0.75)", fontFamily: "'Space Grotesk',sans-serif" }}>
+            style={{ color: "var(--home-copy-soft)", fontFamily: "'Space Grotesk',sans-serif" }}>
             Connecting Pacific Agriculture,<br />Climate, and Data.
           </p>
           <p className="text-sm mb-10 leading-relaxed font-mono"
-            style={{ color: "rgba(255,255,255,0.4)" }}>
+            style={{ color: "var(--home-copy-muted)" }}>
             Explore crop &amp; livestock yield trends across 16 Pacific Island nations<br />
             through immersive data visualization, AI storytelling, and predictive intelligence.
           </p>
@@ -522,7 +522,7 @@ export function Hero() {
 
           {/* Stats bar */}
           <div className="flex items-center gap-0 border-t border-b"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            style={{ borderColor: "var(--home-divider)" }}>
             {[
               { v: "16", l: "Countries" },
               { v: "78", l: "Products" },
@@ -530,10 +530,10 @@ export function Hero() {
               { v: "12K+", l: "Records" },
             ].map((s, i) => (
               <div key={s.l} className="flex-1 py-4 text-center"
-                style={{ borderLeft: i === 0 ? "none" : "1px solid rgba(255,255,255,0.08)" }}>
+                style={{ borderLeft: i === 0 ? "none" : "1px solid var(--home-divider)" }}>
                 <div className="font-mono text-2xl font-bold" style={{ color: "#00FFD1" }}>{s.v}</div>
                 <div className="text-xs font-mono uppercase tracking-widest mt-0.5"
-                  style={{ color: "rgba(255,255,255,0.35)" }}>{s.l}</div>
+                  style={{ color: "var(--home-copy-muted)" }}>{s.l}</div>
               </div>
             ))}
           </div>
@@ -542,7 +542,7 @@ export function Hero() {
 
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-20"
-        style={{ background: "linear-gradient(to bottom,transparent,#03001C)" }} />
+        style={{ background: "linear-gradient(to bottom,transparent,var(--color-background))" }} />
 
       {/* Scroll cue */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2">

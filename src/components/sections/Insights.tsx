@@ -1,44 +1,262 @@
 import { TrendingUp, MapPinned, Leaf, Trophy, CloudRain, Lightbulb } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+
+function MiniSparkline({ color }: { color: string }) {
+  const pts = [60, 45, 70, 40, 65, 50, 80, 55, 90, 72];
+  const max = Math.max(...pts);
+  const min = Math.min(...pts);
+  const norm = pts.map((v) => ((v - min) / (max - min)) * 28 + 4);
+  const path = norm.map((y, i) => `${i === 0 ? "M" : "L"}${4 + i * 10.2},${36 - y}`).join(" ");
+
+  return (
+    <svg viewBox="0 0 100 40" className="w-full h-8">
+      <defs>
+        <linearGradient id={`spark-${color.replace("#", "")}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`${path} L${4 + 9 * 10.2},36 L4,36 Z`} fill={`url(#spark-${color.replace("#", "")})`} />
+      <path d={path} fill="none" stroke={color} strokeWidth="1.5"
+        style={{ filter: `drop-shadow(0 0 3px ${color})` }} />
+    </svg>
+  );
+}
+
+function MiniMap({ color }: { color: string }) {
+  const dots = [
+    [40, 55], [65, 60], [55, 70], [45, 65], [30, 70],
+    [80, 45], [25, 55], [70, 75], [50, 40], [85, 65],
+  ];
+  return (
+    <svg viewBox="0 0 100 40" className="w-full h-8">
+      {dots.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y / 2 + 5} r={2.5} fill={color}
+          opacity={0.3 + (i % 4) * 0.18}
+          style={{ filter: `drop-shadow(0 0 3px ${color})` }}
+        />
+      ))}
+    </svg>
+  );
+}
+
+function MiniBar({ color }: { color: string }) {
+  const bars = [0.6, 0.9, 0.4, 0.75, 0.55, 0.85];
+  return (
+    <svg viewBox="0 0 100 40" className="w-full h-8">
+      {bars.map((h, i) => (
+        <rect key={i} x={4 + i * 16} y={36 - h * 28} width="12" height={h * 28} rx="2"
+          fill={color} opacity={0.5 + i * 0.05}
+          style={{ filter: `drop-shadow(0 0 3px ${color}80)` }}
+        />
+      ))}
+    </svg>
+  );
+}
 
 const insights = [
-  { icon: MapPinned, title: "Regional Trends", body: "Patterns of agricultural productivity across geographic zones of the Pacific." },
-  { icon: Trophy, title: "Country Performance", body: "How each nation's yield evolves year over year — winners and shifting leaders." },
-  { icon: Leaf, title: "Agricultural Diversity", body: "Which countries cultivate the broadest mix of crops and livestock." },
-  { icon: TrendingUp, title: "Growth Leaders", body: "Products and regions experiencing the strongest sustained growth." },
-  { icon: CloudRain, title: "Climate Vulnerability", body: "Signals of declining yields that may correlate with climate stress." },
-  { icon: Lightbulb, title: "Opportunity Areas", body: "Untapped categories where investment could yield meaningful returns." },
+  {
+    icon: MapPinned,
+    title: "Regional Trends",
+    body: "Patterns of agricultural productivity across geographic zones of the Pacific.",
+    color: "#00FFD1",
+    mini: MiniMap,
+    tag: "GEO",
+  },
+  {
+    icon: Trophy,
+    title: "Country Performance",
+    body: "How each nation's yield evolves year over year — winners and shifting leaders.",
+    color: "#7B2FFF",
+    mini: MiniSparkline,
+    tag: "RANK",
+  },
+  {
+    icon: Leaf,
+    title: "Agricultural Diversity",
+    body: "Which countries cultivate the broadest mix of crops and livestock products.",
+    color: "#00FFD1",
+    mini: MiniBar,
+    tag: "DIVERSITY",
+  },
+  {
+    icon: TrendingUp,
+    title: "Growth Leaders",
+    body: "Products and regions experiencing the strongest sustained growth signals.",
+    color: "#FF2D6B",
+    mini: MiniSparkline,
+    tag: "GROWTH",
+  },
+  {
+    icon: CloudRain,
+    title: "Climate Vulnerability",
+    body: "Signals of declining yields that may correlate with ongoing climate stress.",
+    color: "#00A8FF",
+    mini: MiniSparkline,
+    tag: "CLIMATE",
+  },
+  {
+    icon: Lightbulb,
+    title: "Opportunity Areas",
+    body: "Untapped categories where targeted investment could yield meaningful returns.",
+    color: "#7B2FFF",
+    mini: MiniMap,
+    tag: "INTEL",
+  },
 ];
+
+function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: number; idx: number }) {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), { threshold: 0.2 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: y * -12, y: x * 12 });
+  };
+
+  const Mini = insight.mini;
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      style={{
+        perspective: "900px",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(30px)",
+        transition: `opacity 0.6s ease ${idx * 80}ms, transform 0.6s ease ${idx * 80}ms`,
+      }}
+    >
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+        onMouseMove={handleMove}
+        className="relative rounded-xl p-6 overflow-hidden cursor-default h-full"
+        style={{
+          background: hovered
+            ? `linear-gradient(135deg, rgba(26,10,74,0.95) 0%, rgba(${insight.color === "#00FFD1" ? "0,50,42" : insight.color === "#7B2FFF" ? "40,15,80" : insight.color === "#FF2D6B" ? "60,10,30" : "0,30,60"},0.9) 100%)`
+            : "linear-gradient(135deg, rgba(15,5,40,0.9) 0%, rgba(3,0,20,0.95) 100%)",
+          border: `1px solid ${hovered ? insight.color + "50" : insight.color + "18"}`,
+          boxShadow: hovered
+            ? `0 0 40px ${insight.color}15, 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 ${insight.color}20`
+            : "0 4px 20px rgba(0,0,0,0.4)",
+          transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 8 : 0}px)`,
+          transformStyle: "preserve-3d",
+          transition: "border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.15s",
+        }}
+      >
+        {/* Tag + index */}
+        <div className="flex items-center justify-between mb-5">
+          <span className="font-mono text-[10px] tracking-widest px-2 py-0.5 rounded"
+            style={{ background: `${insight.color}12`, border: `1px solid ${insight.color}30`, color: insight.color }}>
+            {insight.tag}
+          </span>
+          <span className="font-mono text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
+            0{idx + 1}
+          </span>
+        </div>
+
+        {/* Icon */}
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+          style={{
+            background: `${insight.color}12`,
+            border: `1px solid ${insight.color}25`,
+          }}
+        >
+          <insight.icon className="w-4 h-4" style={{ color: insight.color }} />
+        </div>
+
+        {/* Title */}
+        <h3 className="font-mono font-bold text-base mb-2 uppercase tracking-wide" style={{ color: "#fff" }}>
+          {insight.title}
+        </h3>
+        <p className="text-xs leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          {insight.body}
+        </p>
+
+        {/* Mini chart */}
+        <div style={{ borderTop: `1px solid ${insight.color}15` }} className="pt-3">
+          <Mini color={insight.color} />
+        </div>
+
+        {/* Glow bottom line */}
+        <div className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300"
+          style={{
+            background: `linear-gradient(to right, transparent, ${insight.color}70, transparent)`,
+            opacity: hovered ? 1 : 0,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function MatrixRain() {
+  const chars = "01データ農業気候01".split("");
+  return (
+    <svg className="absolute right-0 top-0 bottom-0 w-32 pointer-events-none opacity-[0.04]" preserveAspectRatio="xMidYMid slice">
+      {chars.map((c, i) => (
+        <text key={i} x="50%" y={`${(i * 11) % 100}%`} textAnchor="middle"
+          fontSize="12" fill="#00FFD1" fontFamily="monospace">
+          <animate attributeName="opacity" values="0;1;0" dur={`${2 + i * 0.3}s`}
+            begin={`${i * 0.4}s`} repeatCount="indefinite" />
+          {c}
+        </text>
+      ))}
+    </svg>
+  );
+}
 
 export function Insights() {
   return (
-    <section id="insights" className="relative py-24 bg-gradient-soft scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="insights" className="relative py-24 overflow-hidden scroll-mt-20"
+      style={{ background: "linear-gradient(180deg, #03001C 0%, #06002E 50%, #03001C 100%)" }}>
+
+      <MatrixRain />
+
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,255,209,0.04) 0%, transparent 70%)" }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="max-w-3xl mb-16">
-          <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">Insights</p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Discover Hidden Patterns</h2>
-          <p className="text-lg text-muted-foreground">
-            Smart, AI-assisted lenses on the official Pacific Dataviz Challenge datasets.
+          <p className="font-mono text-xs uppercase tracking-[0.4em] mb-4" style={{ color: "#00FFD1" }}>
+            Intelligence Layer
+          </p>
+          <h2
+            className="font-bold leading-none mb-4"
+            style={{
+              fontFamily: "'Orbitron', monospace",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              color: "#fff",
+            }}
+          >
+            DISCOVER{" "}
+            <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>HIDDEN</span>
+            <br />PATTERNS
+          </h2>
+          <p className="text-base" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            AI-assisted lenses on the official Pacific Dataviz Challenge datasets —
+            surfacing what raw numbers alone can never show.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {insights.map((i, idx) => (
-            <div
-              key={i.title}
-              className="group relative bg-card rounded-2xl p-8 border border-border shadow-card hover:shadow-elegant transition-all hover:-translate-y-1 overflow-hidden"
-            >
-              <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-gradient-ocean opacity-0 group-hover:opacity-10 transition-opacity" />
-              <div className="relative">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <i.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <span className="text-xs font-mono text-muted-foreground">0{idx + 1}</span>
-                </div>
-                <h3 className="font-display text-xl font-semibold mb-3">{i.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{i.body}</p>
-              </div>
-            </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {insights.map((insight, i) => (
+            <InsightCard key={insight.title} insight={insight} idx={i} />
           ))}
         </div>
       </div>

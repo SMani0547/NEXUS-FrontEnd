@@ -76,133 +76,228 @@ const team: TeamMember[] = [
   },
 ];
 
-const colors = [
-  "from-sky-400 to-teal-400",
-  "from-emerald-400 to-cyan-400",
-  "from-indigo-400 to-sky-400",
-  "from-teal-400 to-emerald-400",
-  "from-blue-500 to-indigo-400",
-  "from-cyan-400 to-blue-500",
+const memberColors = [
+  { primary: "#00FFD1", secondary: "#00A89A" },
+  { primary: "#7B2FFF", secondary: "#5A22CC" },
+  { primary: "#FF2D6B", secondary: "#CC1A4F" },
+  { primary: "#00FFD1", secondary: "#00A89A" },
+  { primary: "#00A8FF", secondary: "#0080CC" },
+  { primary: "#7B2FFF", secondary: "#5A22CC" },
 ];
 
-export function Team() {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
+function HolographicAvatar({ member, color, idx }: { member: TeamMember; color: typeof memberColors[0]; idx: number }) {
+  const initials = member.name.split(" ").map((p) => p[0]).join("");
+  return (
+    <div className="relative w-full aspect-square rounded-lg overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${color.primary}20 0%, ${color.secondary}10 100%)`,
+        border: `1px solid ${color.primary}30`,
+      }}
+    >
+      {/* Scan line effect */}
+      <div className="absolute inset-0 pointer-events-none z-10"
+        style={{
+          background: `repeating-linear-gradient(0deg, transparent, transparent 3px, ${color.primary}06 3px, ${color.primary}06 4px)`,
+        }}
+      />
 
-  const toggleCardForTouch = (name: string) => {
-    const isTouchLike =
-      typeof window !== "undefined" &&
-      window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      {/* Corner brackets */}
+      {[
+        "top-1 left-1 border-t border-l",
+        "top-1 right-1 border-t border-r",
+        "bottom-1 left-1 border-b border-l",
+        "bottom-1 right-1 border-b border-r",
+      ].map((cls, i) => (
+        <div key={i} className={`absolute w-5 h-5 ${cls} z-20`}
+          style={{ borderColor: color.primary, opacity: 0.7 }} />
+      ))}
 
-    if (!isTouchLike) return;
-    setActiveCard((current) => (current === name ? null : name));
+      {/* Photo or initials */}
+      {member.photo ? (
+        <img src={member.photo} alt={member.name}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy" />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span style={{
+            fontFamily: "'Orbitron', monospace",
+            fontSize: "3rem",
+            fontWeight: "bold",
+            color: color.primary,
+            textShadow: `0 0 20px ${color.primary}`,
+          }}>{initials}</span>
+        </div>
+      )}
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 z-10"
+        style={{ background: "linear-gradient(to top, rgba(3,0,28,0.7) 0%, transparent 40%)" }}
+      />
+
+      {/* ID tag at bottom */}
+      <div className="absolute bottom-2 left-2 right-2 z-20">
+        <div className="font-mono text-[9px] tracking-widest" style={{ color: color.primary, opacity: 0.7 }}>
+          NEXUS.ID/{String(idx + 1).padStart(3, "0")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
+  const color = memberColors[idx % memberColors.length];
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [hovered, setHovered] = useState(false);
+  const [activeTouch, setActiveTouch] = useState(false);
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: y * -8, y: x * 8 });
   };
 
-  useEffect(() => {
-    if (!activeCard) return;
-
-    const resetActiveCard = () => setActiveCard(null);
-    window.addEventListener("scroll", resetActiveCard, { passive: true });
-    return () => window.removeEventListener("scroll", resetActiveCard);
-  }, [activeCard]);
-
   return (
-    <section id="team" className="relative py-24 bg-background scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <div
+      className="relative"
+      style={{ perspective: "1000px" }}
+      onClick={() => {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        if (isTouch) setActiveTouch((v) => !v);
+      }}
+    >
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+        onMouseMove={handleMove}
+        className="relative rounded-xl overflow-hidden cursor-default"
+        style={{
+          background: "linear-gradient(135deg, rgba(15,5,40,0.95) 0%, rgba(3,0,20,0.98) 100%)",
+          border: `1px solid ${(hovered || activeTouch) ? color.primary + "50" : color.primary + "18"}`,
+          boxShadow: (hovered || activeTouch)
+            ? `0 0 40px ${color.primary}18, 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 ${color.primary}20`
+            : "0 4px 20px rgba(0,0,0,0.5)",
+          transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 6 : 0}px)`,
+          transformStyle: "preserve-3d",
+          transition: "border-color 0.3s, box-shadow 0.3s, transform 0.15s",
+        }}
+      >
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-4 py-2.5"
+          style={{ borderBottom: `1px solid ${color.primary}12` }}>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full"
+              style={{ background: color.primary, boxShadow: `0 0 6px ${color.primary}` }} />
+            <span className="font-mono text-[9px] tracking-widest uppercase"
+              style={{ color: "rgba(255,255,255,0.25)" }}>
+              TEAM NEXUS
+            </span>
+          </div>
+          <span className="font-mono text-[9px]" style={{ color: `${color.primary}50` }}>
+            {String(idx + 1).padStart(2, "0")}/{team.length}
+          </span>
+        </div>
+
+        {/* Avatar */}
+        <div className="p-4 pb-0">
+          <HolographicAvatar member={member} color={color} idx={idx} />
+        </div>
+
+        {/* Info */}
+        <div className="p-4">
+          <h3 className="font-mono font-bold text-base mb-0.5" style={{ color: "#fff" }}>
+            {member.name}
+          </h3>
+          <p className="font-mono text-xs mb-3 uppercase tracking-wide"
+            style={{ color: color.primary }}>
+            {member.role}
+          </p>
+          <p className="text-xs leading-relaxed mb-4"
+            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            {member.bio}
+          </p>
+
+          {/* Links */}
+          <div className="flex gap-2">
+            <a href={member.linkedin ?? "#"} target="_blank" rel="noopener noreferrer"
+              aria-label={`${member.name} LinkedIn`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-center w-8 h-8 rounded transition-all"
+              style={{
+                background: "rgba(10,102,194,0.2)",
+                border: "1px solid rgba(10,102,194,0.3)",
+                color: "#0A66C2",
+              }}>
+              <LinkedinLogo className="w-3.5 h-3.5" />
+            </a>
+            <a href={member.github ?? "#"} target="_blank" rel="noopener noreferrer"
+              aria-label={`${member.name} GitHub`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-center w-8 h-8 rounded transition-all"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                color: "rgba(255,255,255,0.7)",
+              }}>
+              <GithubLogo className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+
+        {/* Bottom glow bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300"
+          style={{
+            background: `linear-gradient(to right, transparent, ${color.primary}60, transparent)`,
+            opacity: hovered ? 1 : 0,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function Team() {
+  return (
+    <section id="team" className="relative py-24 overflow-hidden scroll-mt-20"
+      style={{ background: "#03001C" }}>
+
+      {/* Background dots grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: "radial-gradient(rgba(0,255,209,1) 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
+
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(123,47,255,0.06) 0%, transparent 70%)" }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="max-w-3xl mb-16">
-          <p className="text-sm uppercase tracking-widest text-accent font-medium mb-3">
+          <p className="font-mono text-xs uppercase tracking-[0.4em] mb-4" style={{ color: "#00FFD1" }}>
             Team Nexus
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Meet Team Nexus</h2>
-          <p className="text-lg text-muted-foreground">
-            A team dedicated to transforming Pacific data into meaningful insights.
+          <h2
+            className="font-bold leading-none mb-4"
+            style={{
+              fontFamily: "'Orbitron', monospace",
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              color: "#fff",
+            }}
+          >
+            MEET{" "}
+            <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>TEAM NEXUS</span>
+          </h2>
+          <p className="text-base" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            A multidisciplinary team transforming Pacific agricultural data into actionable intelligence.
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-6xl sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {team.map((m, i) => {
-            const isActive = activeCard === m.name;
-
-            return (
-            <div
-              key={m.name}
-              className="group relative pt-7 [perspective:1200px]"
-              onClick={() => toggleCardForTouch(m.name)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  toggleCardForTouch(m.name);
-                }
-              }}
-              tabIndex={0}
-            >
-              <div
-                className={`relative h-full rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-500 ease-out [transform-style:preserve-3d] [transform:rotateX(0deg)_translateY(0)] [@media(hover:hover)]:group-hover:shadow-elegant [@media(hover:hover)]:group-hover:[transform:rotateX(52deg)_translateY(12px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "shadow-elegant [transform:rotateX(34deg)_translateY(6px)]" : ""}`}
-              >
-                <div className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 [@media(hover:hover)]:group-hover:opacity-100 ${isActive ? "opacity-100" : ""}`} />
-
-                <div
-                  className={`relative z-10 mb-5 aspect-[6/7] w-full rounded-xl bg-gradient-to-br ${colors[i]} shadow-card transition-all duration-500 ease-out [transform-origin:center_bottom] [transform-style:preserve-3d] [transform:translateZ(0)_rotateX(0deg)_scale(1)] [@media(hover:hover)]:group-hover:z-20 [@media(hover:hover)]:group-hover:[transform:translateZ(58px)_rotateX(-32deg)_scale(1.02)] [@media(hover:hover)]:group-hover:shadow-glow motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "z-20 shadow-glow [transform:translateZ(34px)_rotateX(-32deg)_scale(1)]" : ""}`}
-                >
-                  <div className="absolute inset-0 rounded-xl">
-                    {m.photo ? (
-                      <img
-                        src={m.photo}
-                        alt={m.name}
-                        className="absolute inset-0 h-full w-full rounded-xl object-cover object-center transition-transform duration-500"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex h-full w-full items-center justify-center rounded-xl text-white font-display text-6xl font-bold opacity-90">
-                        {m.name
-                          .split(" ")
-                          .map((p) => p[0])
-                          .join("")}
-                      </div>
-                    )}
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/35 via-transparent to-white/10" />
-                  </div>
-                </div>
-
-                <div className={`relative transition-transform duration-500 ease-out [transform:translateZ(0)] [@media(hover:hover)]:group-hover:[transform:translateZ(34px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(20px)]" : ""}`}>
-                  <h3 className="font-display text-lg font-semibold">{m.name}</h3>
-                  <p className="mb-3 text-sm font-medium text-accent">{m.role}</p>
-                  <p className="mb-4 min-h-14 text-sm leading-relaxed text-muted-foreground">
-                    {m.bio}
-                  </p>
-                </div>
-
-                <div className={`relative flex gap-2 transition-transform duration-500 ease-out [transform:translateZ(0)] [@media(hover:hover)]:group-hover:[transform:translateZ(46px)] motion-reduce:transition-none motion-reduce:transform-none ${isActive ? "[transform:translateZ(26px)]" : ""}`}>
-                  <a
-                    href={m.linkedin ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${m.name} LinkedIn`}
-                    className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0A66C2] text-white transition-colors hover:bg-[#0A66C2]/15 hover:text-[#0A66C2]"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <LinkedinLogo className="h-4 w-4" />
-                  </a>
-                  <a
-                    href={m.github ?? "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${m.name} GitHub`}
-                    className="flex h-8 w-8 items-center justify-center rounded-md bg-[#181717] text-white transition-colors hover:bg-[#181717]/15 hover:text-[#181717] dark:hover:bg-white/20 dark:hover:text-white"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <GithubLogo className="h-4 w-4" />
-                  </a>
-                </div>
-
-                <div
-                  aria-hidden="true"
-                  className={`pointer-events-none absolute inset-x-8 bottom-0 h-8 rounded-full bg-primary/15 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:translate-y-5 [@media(hover:hover)]:group-hover:scale-110 [@media(hover:hover)]:group-hover:bg-primary/25 ${isActive ? "translate-y-5 scale-110 bg-primary/25" : ""}`}
-                >
-                </div>
-              </div>
-            </div>
-            );
-          })}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
+          {team.map((member, idx) => (
+            <MemberCard key={member.name} member={member} idx={idx} />
+          ))}
         </div>
       </div>
     </section>

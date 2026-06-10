@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function CircuitLines() {
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.07]" preserveAspectRatio="xMidYMid slice">
+    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.09] dark:opacity-[0.07]" preserveAspectRatio="xMidYMid slice">
       <defs>
         <pattern id="circuit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
           {/* Horizontal traces */}

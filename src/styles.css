@@ -79,17 +79,17 @@
                    linear-gradient(180deg, oklch(0.21 0.05 260) 0%, oklch(0.16 0.05 260) 100%);
   --gradient-ocean: linear-gradient(135deg, var(--ocean) 0%, var(--teal) 100%);
   --gradient-soft: linear-gradient(180deg, oklch(0.99 0.005 240) 0%, oklch(0.97 0.01 240) 100%);
-  --home-section-bg: linear-gradient(180deg, oklch(0.995 0.006 240) 0%, oklch(0.975 0.015 240) 50%, oklch(0.99 0.008 240) 100%);
-  --home-section-alt-bg: linear-gradient(180deg, oklch(0.98 0.012 240) 0%, oklch(0.955 0.018 240) 100%);
-  --home-panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.92) 0%, oklch(0.97 0.012 240 / 0.96) 100%);
-  --home-panel-strong-bg: linear-gradient(135deg, oklch(0.985 0.012 240 / 0.96) 0%, oklch(0.95 0.02 240 / 0.98) 100%);
-  --home-terminal-bg: linear-gradient(180deg, oklch(0.975 0.012 240) 0%, oklch(0.95 0.02 240) 100%);
-  --home-grid-color: rgba(15, 23, 42, 0.08);
-  --home-teal-glow: rgba(20, 184, 166, 0.08);
-  --home-violet-glow: rgba(14, 165, 233, 0.08);
-  --home-copy-soft: rgba(15, 23, 42, 0.72);
-  --home-copy-muted: rgba(15, 23, 42, 0.5);
-  --home-divider: rgba(15, 23, 42, 0.12);
+  --home-section-bg: linear-gradient(180deg, oklch(0.985 0.01 240) 0%, oklch(0.96 0.02 240) 50%, oklch(0.978 0.012 240) 100%);
+  --home-section-alt-bg: linear-gradient(180deg, oklch(0.97 0.016 240) 0%, oklch(0.945 0.024 240) 100%);
+  --home-panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.98) 0%, oklch(0.975 0.015 240 / 0.99) 100%);
+  --home-panel-strong-bg: linear-gradient(135deg, oklch(0.995 0.012 240 / 0.99) 0%, oklch(0.962 0.022 240 / 1) 100%);
+  --home-terminal-bg: linear-gradient(180deg, oklch(0.985 0.01 240) 0%, oklch(0.955 0.02 240) 100%);
+  --home-grid-color: rgba(15, 23, 42, 0.2);
+  --home-teal-glow: rgba(20, 184, 166, 0.12);
+  --home-violet-glow: rgba(14, 165, 233, 0.12);
+  --home-copy-soft: rgba(15, 23, 42, 0.84);
+  --home-copy-muted: rgba(15, 23, 42, 0.68);
+  --home-divider: rgba(15, 23, 42, 0.18);
 
   --shadow-elegant: 0 10px 40px -10px oklch(0.21 0.05 260 / 0.15);
   --shadow-glow: 0 0 60px oklch(0.7 0.16 230 / 0.35);

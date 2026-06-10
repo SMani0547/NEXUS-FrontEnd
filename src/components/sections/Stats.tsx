@@ -204,7 +204,7 @@ export function Stats() {
   return (
     <section className="relative py-24 overflow-hidden" style={{ background: "var(--home-section-alt-bg)" }}>
       {/* Background grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+      <div className="absolute inset-0 pointer-events-none opacity-[0.08] dark:opacity-[0.04]"
         style={{
           backgroundImage: "linear-gradient(var(--home-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--home-grid-color) 1px, transparent 1px)",
           backgroundSize: "60px 60px",

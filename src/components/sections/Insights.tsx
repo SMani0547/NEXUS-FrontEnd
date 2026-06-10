@@ -207,7 +207,7 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
 function MatrixRain() {
   const chars = "01データ農業気候01".split("");
   return (
-    <svg className="absolute right-0 top-0 bottom-0 w-32 pointer-events-none opacity-[0.04]" preserveAspectRatio="xMidYMid slice">
+    <svg className="absolute right-0 top-0 bottom-0 w-32 pointer-events-none opacity-[0.08] dark:opacity-[0.04]" preserveAspectRatio="xMidYMid slice">
       {chars.map((c, i) => (
         <text key={i} x="50%" y={`${(i * 11) % 100}%`} textAnchor="middle"
           fontSize="12" fill="#00FFD1" fontFamily="monospace">

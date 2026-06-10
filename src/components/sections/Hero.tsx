@@ -427,7 +427,7 @@ function HexGrid() {
   }
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.045]"
+    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.08] dark:opacity-[0.045]"
       preserveAspectRatio="xMidYMid slice">
       {hexes.map((h) => (
         <path key={h.id} d={hexPath(h.x, h.y)}

@@ -49,7 +49,7 @@ function DataPipeline() {
         <line key={i}
           x1={s.x + 52} y1="40"
           x2={stages[i + 1].x - 2} y2="40"
-          stroke="rgba(255,255,255,0.08)" strokeWidth="2" strokeDasharray="4 6"
+          stroke="var(--home-divider)" strokeWidth="2" strokeDasharray="4 6"
         />
       ))}
 
@@ -74,13 +74,13 @@ function DataPipeline() {
       {stages.map((s, i) => (
         <g key={s.label}>
           <rect x={s.x} y="22" width="52" height="36" rx="6"
-            fill={i <= Math.floor(step / 1.5) % stages.length ? `${s.color}20` : "rgba(255,255,255,0.03)"}
-            stroke={i <= Math.floor(step / 1.5) % stages.length ? s.color : "rgba(255,255,255,0.1)"}
+            fill={i <= Math.floor(step / 1.5) % stages.length ? `${s.color}20` : "rgba(15,23,42,0.05)"}
+            stroke={i <= Math.floor(step / 1.5) % stages.length ? s.color : "var(--home-divider)"}
             strokeWidth="1"
             style={{ transition: "fill 0.3s, stroke 0.3s", filter: `drop-shadow(0 0 6px ${s.color}40)` }}
           />
           <text x={s.x + 26} y="44" textAnchor="middle" fontSize="7"
-            fill={i <= Math.floor(step / 1.5) % stages.length ? s.color : "rgba(255,255,255,0.3)"}
+            fill={i <= Math.floor(step / 1.5) % stages.length ? s.color : "var(--home-copy-muted)"}
             fontFamily="monospace" fontWeight="bold">
             {s.label}
           </text>
@@ -154,7 +154,7 @@ export function DataSources() {
       style={{ background: "var(--home-section-alt-bg)" }}>
 
       {/* Background hex */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+      <div className="absolute inset-0 pointer-events-none opacity-[0.08] dark:opacity-[0.03]"
         style={{
           backgroundImage: "linear-gradient(var(--home-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--home-grid-color) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
@@ -213,7 +213,7 @@ export function DataSources() {
             </div>
 
             {/* Pipeline */}
-            <div className="px-6 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+            <div className="px-6 py-5 border-b" style={{ borderColor: "var(--home-divider)" }}>
               <p className="font-mono text-[10px] uppercase tracking-widest mb-3" style={{ color: "var(--home-copy-muted)" }}>
                 Data Pipeline
               </p>
@@ -234,7 +234,7 @@ export function DataSources() {
                     rel="noopener noreferrer"
                     className="group relative rounded-lg p-4 transition-all"
                     style={{
-                      background: "rgba(255,255,255,0.03)",
+                      background: "rgba(255,255,255,0.45)",
                       border: `1px solid ${d.color}20`,
                     }}
                     onMouseEnter={(e) => {
@@ -243,7 +243,7 @@ export function DataSources() {
                     }}
                     onMouseLeave={(e) => {
                       (e.currentTarget as HTMLElement).style.borderColor = `${d.color}20`;
-                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.45)";
                     }}
                   >
                     <div className="flex items-start justify-between gap-2 mb-3">

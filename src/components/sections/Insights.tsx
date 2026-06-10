@@ -146,12 +146,12 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         className="relative rounded-xl p-6 overflow-hidden cursor-default h-full"
         style={{
           background: hovered
-            ? `linear-gradient(135deg, rgba(26,10,74,0.95) 0%, rgba(${insight.color === "#00FFD1" ? "0,50,42" : insight.color === "#7B2FFF" ? "40,15,80" : insight.color === "#FF2D6B" ? "60,10,30" : "0,30,60"},0.9) 100%)`
-            : "linear-gradient(135deg, rgba(15,5,40,0.9) 0%, rgba(3,0,20,0.95) 100%)",
+            ? `linear-gradient(135deg, ${insight.color}10 0%, var(--card) 100%)`
+            : "var(--home-panel-bg)",
           border: `1px solid ${hovered ? insight.color + "50" : insight.color + "18"}`,
           boxShadow: hovered
             ? `0 0 40px ${insight.color}15, 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 ${insight.color}20`
-            : "0 4px 20px rgba(0,0,0,0.4)",
+            : "var(--shadow-card)",
           transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 8 : 0}px)`,
           transformStyle: "preserve-3d",
           transition: "border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.15s",
@@ -163,7 +163,7 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
             style={{ background: `${insight.color}12`, border: `1px solid ${insight.color}30`, color: insight.color }}>
             {insight.tag}
           </span>
-          <span className="font-mono text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
+          <span className="font-mono text-xs" style={{ color: "var(--home-copy-muted)" }}>
             0{idx + 1}
           </span>
         </div>
@@ -180,10 +180,10 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         </div>
 
         {/* Title */}
-        <h3 className="font-mono font-bold text-base mb-2 uppercase tracking-wide" style={{ color: "#fff" }}>
+        <h3 className="font-mono font-bold text-base mb-2 uppercase tracking-wide" style={{ color: "var(--foreground)" }}>
           {insight.title}
         </h3>
-        <p className="text-xs leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+        <p className="text-xs leading-relaxed mb-5" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
           {insight.body}
         </p>
 
@@ -223,12 +223,12 @@ function MatrixRain() {
 export function Insights() {
   return (
     <section id="insights" className="relative py-24 overflow-hidden scroll-mt-20"
-      style={{ background: "linear-gradient(180deg, #03001C 0%, #06002E 50%, #03001C 100%)" }}>
+      style={{ background: "var(--home-section-bg)" }}>
 
       <MatrixRain />
 
       <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,255,209,0.04) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, var(--home-teal-glow) 0%, transparent 70%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -241,14 +241,14 @@ export function Insights() {
             style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              color: "#fff",
+              color: "var(--foreground)",
             }}
           >
             DISCOVER{" "}
             <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>HIDDEN</span>
             <br />PATTERNS
           </h2>
-          <p className="text-base" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          <p className="text-base" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
             AI-assisted lenses on the official Pacific Dataviz Challenge datasets —
             surfacing what raw numbers alone can never show.
           </p>

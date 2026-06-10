@@ -28,7 +28,7 @@ function DataRing({ value, max, color }: { value: number; max: number; color: st
 
   return (
     <svg viewBox="0 0 88 88" className="w-full h-full" style={{ transform: "rotate(-90deg)" }}>
-      <circle cx="44" cy="44" r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
+      <circle cx="44" cy="44" r={r} fill="none" stroke="var(--home-divider)" strokeWidth="3" />
       <circle cx="44" cy="44" r={r} fill="none" stroke={color} strokeWidth="3"
         strokeDasharray={`${dash.toFixed(2)} ${circ.toFixed(2)}`}
         strokeLinecap="round"
@@ -78,7 +78,7 @@ function StatCard({
       <div
         className="relative rounded-xl p-6 overflow-hidden transition-transform duration-100 ease-out"
         style={{
-          background: "linear-gradient(135deg, rgba(26,10,74,0.9) 0%, rgba(3,0,28,0.95) 100%)",
+          background: "var(--home-panel-strong-bg)",
           border: `1px solid ${color}28`,
           boxShadow: `0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.5), 0 0 40px ${color}18`,
           transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(0)`,
@@ -110,7 +110,7 @@ function StatCard({
             </div>
           </div>
           <div className="pt-1">
-            <div className="font-mono text-xs uppercase tracking-widest mb-1" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <div className="font-mono text-xs uppercase tracking-widest mb-1" style={{ color: "var(--home-copy-muted)" }}>
               {label}
             </div>
             <div
@@ -128,7 +128,7 @@ function StatCard({
         </div>
 
         {/* Description */}
-        <p className="text-xs font-mono leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <p className="text-xs font-mono leading-relaxed" style={{ color: "var(--home-copy-muted)" }}>
           {description}
         </p>
 
@@ -202,17 +202,17 @@ export function Stats() {
   ];
 
   return (
-    <section className="relative py-24 overflow-hidden" style={{ background: "#03001C" }}>
+    <section className="relative py-24 overflow-hidden" style={{ background: "var(--home-section-alt-bg)" }}>
       {/* Background grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
-          backgroundImage: "linear-gradient(rgba(0,255,209,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,209,1) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(var(--home-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--home-grid-color) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
 
       <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(123,47,255,0.08) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 50%, var(--home-violet-glow) 0%, transparent 70%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -226,7 +226,7 @@ export function Stats() {
             style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              color: "#ffffff",
+              color: "var(--foreground)",
               textShadow: "0 0 40px rgba(0,255,209,0.2)",
             }}
           >

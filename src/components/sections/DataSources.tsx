@@ -93,8 +93,8 @@ function DataPipeline() {
 function TerminalLog() {
   const lines = [
     { text: "$ nexus init --source=pacific-dataviz-2026", color: "#00FFD1" },
-    { text: "> Connecting to SPC data portal...", color: "rgba(255,255,255,0.5)" },
-    { text: "> Fetching DF_AGRICULTURAL_PRODUCTION...", color: "rgba(255,255,255,0.5)" },
+    { text: "> Connecting to SPC data portal...", color: "var(--home-copy-muted)" },
+    { text: "> Fetching DF_AGRICULTURAL_PRODUCTION...", color: "var(--home-copy-muted)" },
     { text: "[OK] 2 datasets loaded", color: "#00FFD1" },
     { text: "[OK] 16 countries indexed", color: "#00FFD1" },
     { text: "[OK] 78 products catalogued", color: "#00FFD1" },
@@ -139,7 +139,7 @@ function DataNotes() {
             style={{ background: `${n.color}15`, border: `1px solid ${n.color}30` }}>
             <n.icon className="w-3.5 h-3.5" style={{ color: n.color }} />
           </div>
-          <span className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          <span className="text-sm leading-relaxed" style={{ color: "var(--home-copy-soft)", fontFamily: "'Space Grotesk', sans-serif" }}>
             {n.text}
           </span>
         </div>
@@ -151,12 +151,12 @@ function DataNotes() {
 export function DataSources() {
   return (
     <section id="sources" className="relative py-24 overflow-hidden scroll-mt-20"
-      style={{ background: "linear-gradient(180deg, #06002E 0%, #03001C 100%)" }}>
+      style={{ background: "var(--home-section-alt-bg)" }}>
 
       {/* Background hex */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          backgroundImage: "linear-gradient(rgba(0,255,209,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,209,1) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(var(--home-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--home-grid-color) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
@@ -171,13 +171,13 @@ export function DataSources() {
             style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              color: "#fff",
+              color: "var(--foreground)",
             }}
           >
             DATA{" "}
             <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>SOURCES</span>
           </h2>
-          <p className="text-base" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          <p className="text-base" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
             Every visualization in Nexus is grounded in official Pacific Dataviz Challenge datasets.
           </p>
         </div>
@@ -186,7 +186,7 @@ export function DataSources() {
           {/* Main source card */}
           <div className="lg:col-span-8 rounded-xl overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, rgba(15,5,40,0.95) 0%, rgba(3,0,20,0.98) 100%)",
+              background: "var(--home-panel-bg)",
               border: "1px solid rgba(0,255,209,0.15)",
               boxShadow: "0 0 40px rgba(0,255,209,0.06)",
             }}>
@@ -199,7 +199,7 @@ export function DataSources() {
                 <Database className="w-5 h-5" style={{ color: "#00FFD1" }} />
               </div>
               <div>
-                <h3 className="font-mono font-bold text-base" style={{ color: "#fff" }}>
+                <h3 className="font-mono font-bold text-base" style={{ color: "var(--foreground)" }}>
                   Pacific Dataviz Challenge 2026
                 </h3>
                 <p className="font-mono text-xs" style={{ color: "rgba(0,255,209,0.5)" }}>
@@ -214,7 +214,7 @@ export function DataSources() {
 
             {/* Pipeline */}
             <div className="px-6 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-              <p className="font-mono text-[10px] uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.25)" }}>
+              <p className="font-mono text-[10px] uppercase tracking-widest mb-3" style={{ color: "var(--home-copy-muted)" }}>
                 Data Pipeline
               </p>
               <DataPipeline />
@@ -222,7 +222,7 @@ export function DataSources() {
 
             {/* Source files */}
             <div className="p-6">
-              <p className="font-mono text-[10px] uppercase tracking-widest mb-4" style={{ color: "rgba(255,255,255,0.25)" }}>
+              <p className="font-mono text-[10px] uppercase tracking-widest mb-4" style={{ color: "var(--home-copy-muted)" }}>
                 Source Files
               </p>
               <div className="grid sm:grid-cols-2 gap-4">
@@ -249,13 +249,13 @@ export function DataSources() {
                     <div className="flex items-start justify-between gap-2 mb-3">
                       <FileSpreadsheet className="w-4 h-4 flex-shrink-0" style={{ color: d.color }} />
                       <ExternalLink className="w-3.5 h-3.5 flex-shrink-0 transition-colors"
-                        style={{ color: "rgba(255,255,255,0.2)" }} />
+                        style={{ color: "var(--home-copy-muted)" }} />
                     </div>
-                    <div className="font-mono font-semibold text-sm mb-1" style={{ color: "#fff" }}>{d.name}</div>
-                    <div className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>{d.desc}</div>
+                    <div className="font-mono font-semibold text-sm mb-1" style={{ color: "var(--foreground)" }}>{d.name}</div>
+                    <div className="text-xs mb-3" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>{d.desc}</div>
                     <div className="flex gap-4">
                       <span className="font-mono text-[10px]" style={{ color: d.color }}>↓ {d.size}</span>
-                      <span className="font-mono text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }}>{d.records} rows</span>
+                      <span className="font-mono text-[10px]" style={{ color: "var(--home-copy-muted)" }}>{d.records} rows</span>
                     </div>
                   </a>
                 ))}
@@ -268,7 +268,7 @@ export function DataSources() {
             {/* Terminal */}
             <div className="rounded-xl flex-1 overflow-hidden"
               style={{
-                background: "#020010",
+                background: "var(--home-terminal-bg)",
                 border: "1px solid rgba(0,255,209,0.12)",
               }}>
               <div className="flex items-center gap-2 px-4 py-3"
@@ -286,7 +286,7 @@ export function DataSources() {
             {/* Data notes */}
             <div className="rounded-xl p-6"
               style={{
-                background: "linear-gradient(135deg, rgba(26,10,74,0.6) 0%, rgba(3,0,20,0.8) 100%)",
+                background: "var(--home-panel-strong-bg)",
                 border: "1px solid rgba(123,47,255,0.2)",
               }}>
               <p className="font-mono text-[10px] uppercase tracking-widest mb-5" style={{ color: "rgba(123,47,255,0.8)" }}>

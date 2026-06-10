@@ -172,11 +172,11 @@ function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
         onMouseMove={handleMove}
         className="relative rounded-xl overflow-hidden cursor-default"
         style={{
-          background: "linear-gradient(135deg, rgba(15,5,40,0.95) 0%, rgba(3,0,20,0.98) 100%)",
+          background: "var(--home-panel-bg)",
           border: `1px solid ${(hovered || activeTouch) ? color.primary + "50" : color.primary + "18"}`,
           boxShadow: (hovered || activeTouch)
             ? `0 0 40px ${color.primary}18, 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 ${color.primary}20`
-            : "0 4px 20px rgba(0,0,0,0.5)",
+            : "var(--shadow-card)",
           transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 6 : 0}px)`,
           transformStyle: "preserve-3d",
           transition: "border-color 0.3s, box-shadow 0.3s, transform 0.15s",
@@ -189,7 +189,7 @@ function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
             <div className="w-1.5 h-1.5 rounded-full"
               style={{ background: color.primary, boxShadow: `0 0 6px ${color.primary}` }} />
             <span className="font-mono text-[9px] tracking-widest uppercase"
-              style={{ color: "rgba(255,255,255,0.25)" }}>
+              style={{ color: "var(--home-copy-muted)" }}>
               TEAM NEXUS
             </span>
           </div>
@@ -205,7 +205,7 @@ function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
 
         {/* Info */}
         <div className="p-4">
-          <h3 className="font-mono font-bold text-base mb-0.5" style={{ color: "#fff" }}>
+          <h3 className="font-mono font-bold text-base mb-0.5" style={{ color: "var(--foreground)" }}>
             {member.name}
           </h3>
           <p className="font-mono text-xs mb-3 uppercase tracking-wide"
@@ -213,7 +213,7 @@ function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
             {member.role}
           </p>
           <p className="text-xs leading-relaxed mb-4"
-            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
             {member.bio}
           </p>
 
@@ -259,18 +259,18 @@ function MemberCard({ member, idx }: { member: TeamMember; idx: number }) {
 export function Team() {
   return (
     <section id="team" className="relative py-24 overflow-hidden scroll-mt-20"
-      style={{ background: "#03001C" }}>
+      style={{ background: "var(--home-section-bg)" }}>
 
       {/* Background dots grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          backgroundImage: "radial-gradient(rgba(0,255,209,1) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(var(--home-grid-color) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
         }}
       />
 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(123,47,255,0.06) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, var(--home-violet-glow) 0%, transparent 70%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -283,13 +283,13 @@ export function Team() {
             style={{
               fontFamily: "'Orbitron', monospace",
               fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              color: "#fff",
+              color: "var(--foreground)",
             }}
           >
             MEET{" "}
             <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>TEAM NEXUS</span>
           </h2>
-          <p className="text-base" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'Space Grotesk', sans-serif" }}>
+          <p className="text-base" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
             A multidisciplinary team transforming Pacific agricultural data into actionable intelligence.
           </p>
         </div>

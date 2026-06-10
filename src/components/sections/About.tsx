@@ -117,14 +117,14 @@ export function About() {
 
   return (
     <section id="about" className="relative py-24 overflow-hidden scroll-mt-20"
-      style={{ background: "linear-gradient(180deg, #03001C 0%, #06002E 50%, #03001C 100%)" }}>
+      style={{ background: "var(--home-section-bg)" }}>
       <CircuitLines />
 
       {/* Glow accents */}
       <div className="absolute top-1/4 left-0 w-[400px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(0,255,209,0.07) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle, var(--home-teal-glow) 0%, transparent 70%)" }} />
       <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(123,47,255,0.07) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle, var(--home-violet-glow) 0%, transparent 70%)" }} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
@@ -138,13 +138,13 @@ export function About() {
               style={{
                 fontFamily: "'Orbitron', monospace",
                 fontSize: "clamp(2.4rem, 5vw, 4rem)",
-                color: "#ffffff",
+                color: "var(--foreground)",
               }}
             >
               WHAT IS{" "}
               <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>NEXUS?</span>
             </h2>
-            <p className="text-base leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            <p className="text-base leading-relaxed mb-6" style={{ color: "var(--home-copy-soft)", fontFamily: "'Space Grotesk', sans-serif" }}>
               Nexus is an AI-powered interactive data visualization platform that connects
               climate signals, agriculture records, and decision intelligence across the Pacific.
               By combining agricultural datasets, immersive visualizations, geographic exploration,
@@ -155,7 +155,7 @@ export function About() {
               {["16 Pacific nations. One unified lens.", "Crop yields. Livestock trends. Climate signals.", "From raw CSV to interactive intelligence."].map((line) => (
                 <div key={line} className="flex items-center gap-3">
                   <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#00FFD1", boxShadow: "0 0 6px #00FFD1" }} />
-                  <span className="font-mono text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>{line}</span>
+                  <span className="font-mono text-sm" style={{ color: "var(--home-copy-muted)" }}>{line}</span>
                 </div>
               ))}
             </div>
@@ -187,11 +187,11 @@ export function About() {
               <div
                 className="relative rounded-xl p-8 overflow-hidden transition-all duration-150"
                 style={{
-                  background: "linear-gradient(135deg, rgba(26,10,74,0.8) 0%, rgba(3,0,28,0.9) 100%)",
+                  background: "var(--home-panel-strong-bg)",
                   border: `1px solid ${hovered === c.id ? c.color + "60" : c.color + "20"}`,
                   boxShadow: hovered === c.id
                     ? `0 0 40px ${c.color}20, 0 0 80px ${c.color}10, inset 0 1px 0 ${c.color}20`
-                    : "0 4px 24px rgba(0,0,0,0.4)",
+                    : "var(--shadow-card)",
                   transform: `perspective(800px) rotateX(${tilt[c.id]?.x ?? 0}deg) rotateY(${tilt[c.id]?.y ?? 0}deg)`,
                   transformStyle: "preserve-3d",
                 }}
@@ -214,10 +214,10 @@ export function About() {
                   <c.icon className="w-5 h-5" style={{ color: c.color }} />
                 </div>
 
-                <h3 className="font-mono font-bold text-xl mb-3 uppercase tracking-wider" style={{ color: "#fff" }}>
+                <h3 className="font-mono font-bold text-xl mb-3 uppercase tracking-wider" style={{ color: "var(--foreground)" }}>
                   {c.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)", fontFamily: "'Space Grotesk', sans-serif" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>
                   {c.body}
                 </p>
 

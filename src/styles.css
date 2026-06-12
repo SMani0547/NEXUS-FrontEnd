@@ -90,6 +90,23 @@
   --home-copy-soft: rgba(15, 23, 42, 0.84);
   --home-copy-muted: rgba(15, 23, 42, 0.68);
   --home-divider: rgba(15, 23, 42, 0.18);
+  --journey-bg: #f8fafc;
+  --journey-foreground: #0f172a;
+  --journey-copy: rgba(15, 23, 42, 0.68);
+  --journey-overlay: linear-gradient(90deg, rgba(248,250,252,0.98) 0%, rgba(248,250,252,0.86) 38%, rgba(248,250,252,0.16) 72%, rgba(248,250,252,0.58) 100%);
+  --journey-edge-top: linear-gradient(to bottom, #f8fafc, transparent);
+  --journey-edge-bottom: linear-gradient(to top, #f8fafc, transparent);
+  --journey-control: rgba(15, 23, 42, 0.45);
+  --journey-control-border: rgba(15, 23, 42, 0.28);
+  --journey-button-bg: rgba(255, 255, 255, 0.72);
+  --journey-button-border: rgba(15, 23, 42, 0.18);
+  --journey-button-hover: rgba(255, 255, 255, 0.95);
+  --insight-teal: #008f7a;
+  --insight-violet: #6330c7;
+  --insight-pink: #d81b55;
+  --insight-blue: #0676b8;
+  --insight-heading-glow: 0 2px 12px rgba(0, 143, 122, 0.2);
+  --insight-card-hover-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
 
   --shadow-elegant: 0 10px 40px -10px oklch(0.21 0.05 260 / 0.15);
   --shadow-glow: 0 0 60px oklch(0.7 0.16 230 / 0.35);
@@ -126,6 +143,23 @@
   --home-copy-soft: rgba(255, 255, 255, 0.55);
   --home-copy-muted: rgba(255, 255, 255, 0.4);
   --home-divider: rgba(255, 255, 255, 0.08);
+  --journey-bg: #03001c;
+  --journey-foreground: #ffffff;
+  --journey-copy: rgba(255, 255, 255, 0.62);
+  --journey-overlay: linear-gradient(90deg, rgba(3,0,28,0.97) 0%, rgba(3,0,28,0.8) 38%, rgba(3,0,28,0.12) 72%, rgba(3,0,28,0.52) 100%);
+  --journey-edge-top: linear-gradient(to bottom, #03001c, transparent);
+  --journey-edge-bottom: linear-gradient(to top, #03001c, transparent);
+  --journey-control: rgba(255, 255, 255, 0.42);
+  --journey-control-border: rgba(255, 255, 255, 0.35);
+  --journey-button-bg: rgba(255, 255, 255, 0.08);
+  --journey-button-border: rgba(255, 255, 255, 0.2);
+  --journey-button-hover: rgba(255, 255, 255, 0.14);
+  --insight-teal: #00ffd1;
+  --insight-violet: #7b2fff;
+  --insight-pink: #ff2d6b;
+  --insight-blue: #00a8ff;
+  --insight-heading-glow: 0 0 20px #00ffd1;
+  --insight-card-hover-shadow: 0 0 40px rgba(0, 255, 209, 0.08), 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 @layer base {

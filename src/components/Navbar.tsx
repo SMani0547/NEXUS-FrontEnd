@@ -79,7 +79,7 @@ export function Navbar() {
           />
           <span
             className={`font-display font-bold text-lg tracking-tight ${
-              heroTransparentMode ? "text-white" : "text-foreground"
+              heroTransparentMode ? "text-foreground dark:text-white" : "text-foreground"
             }`}
           >
             NEXUS
@@ -94,7 +94,7 @@ export function Navbar() {
           {showSlidingPill && (
             <span
               className={`pointer-events-none absolute h-8 rounded-md transition-all duration-300 ${
-                heroTransparentMode ? "bg-white/12" : "bg-accent/15"
+                heroTransparentMode ? "bg-navy/8 dark:bg-white/12" : "bg-accent/15"
               }`}
               style={{
                 left: `${indicator.left}px`,
@@ -126,10 +126,10 @@ export function Navbar() {
                 className={`${showSlidingPill ? "relative z-10" : ""} px-3 py-1.5 text-sm rounded-md transition-colors ${
                   active
                     ? heroTransparentMode
-                      ? "text-white font-medium"
+                      ? "text-foreground dark:text-white font-medium"
                       : "text-foreground font-medium"
                     : heroTransparentMode
-                      ? "text-white/80 hover:text-white"
+                      ? "text-foreground/70 hover:text-foreground dark:text-white/80 dark:hover:text-white"
                       : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -148,7 +148,7 @@ export function Navbar() {
           <button
             className={`lg:hidden rounded-md p-2 transition-colors ${
               heroTransparentMode
-                ? "text-white hover:bg-white/10"
+                ? "text-foreground hover:bg-navy/8 dark:text-white dark:hover:bg-white/10"
                 : "text-foreground hover:bg-accent/10"
             }`}
             onClick={() => setOpen(!open)}

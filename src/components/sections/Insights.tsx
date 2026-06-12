@@ -7,16 +7,17 @@ function MiniSparkline({ color }: { color: string }) {
   const min = Math.min(...pts);
   const norm = pts.map((v) => ((v - min) / (max - min)) * 28 + 4);
   const path = norm.map((y, i) => `${i === 0 ? "M" : "L"}${4 + i * 10.2},${36 - y}`).join(" ");
+  const gradientId = `spark-${color.replace(/[^a-z0-9]/gi, "")}`;
 
   return (
     <svg viewBox="0 0 100 40" className="w-full h-8">
       <defs>
-        <linearGradient id={`spark-${color.replace("#", "")}`} x1="0" x2="0" y1="0" y2="1">
+        <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor={color} stopOpacity="0.3" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={`${path} L${4 + 9 * 10.2},36 L4,36 Z`} fill={`url(#spark-${color.replace("#", "")})`} />
+      <path d={`${path} L${4 + 9 * 10.2},36 L4,36 Z`} fill={`url(#${gradientId})`} />
       <path d={path} fill="none" stroke={color} strokeWidth="1.5"
         style={{ filter: `drop-shadow(0 0 3px ${color})` }} />
     </svg>
@@ -59,7 +60,7 @@ const insights = [
     icon: MapPinned,
     title: "Regional Trends",
     body: "Patterns of agricultural productivity across geographic zones of the Pacific.",
-    color: "#00FFD1",
+    color: "var(--insight-teal)",
     mini: MiniMap,
     tag: "GEO",
   },
@@ -67,7 +68,7 @@ const insights = [
     icon: Trophy,
     title: "Country Performance",
     body: "How each nation's yield evolves year over year — winners and shifting leaders.",
-    color: "#7B2FFF",
+    color: "var(--insight-violet)",
     mini: MiniSparkline,
     tag: "RANK",
   },
@@ -75,7 +76,7 @@ const insights = [
     icon: Leaf,
     title: "Agricultural Diversity",
     body: "Which countries cultivate the broadest mix of crops and livestock products.",
-    color: "#00FFD1",
+    color: "var(--insight-teal)",
     mini: MiniBar,
     tag: "DIVERSITY",
   },
@@ -83,7 +84,7 @@ const insights = [
     icon: TrendingUp,
     title: "Growth Leaders",
     body: "Products and regions experiencing the strongest sustained growth signals.",
-    color: "#FF2D6B",
+    color: "var(--insight-pink)",
     mini: MiniSparkline,
     tag: "GROWTH",
   },
@@ -91,7 +92,7 @@ const insights = [
     icon: CloudRain,
     title: "Climate Vulnerability",
     body: "Signals of declining yields that may correlate with ongoing climate stress.",
-    color: "#00A8FF",
+    color: "var(--insight-blue)",
     mini: MiniSparkline,
     tag: "CLIMATE",
   },
@@ -99,7 +100,7 @@ const insights = [
     icon: Lightbulb,
     title: "Opportunity Areas",
     body: "Untapped categories where targeted investment could yield meaningful returns.",
-    color: "#7B2FFF",
+    color: "var(--insight-violet)",
     mini: MiniMap,
     tag: "INTEL",
   },
@@ -146,11 +147,11 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         className="relative rounded-xl p-6 overflow-hidden cursor-default h-full"
         style={{
           background: hovered
-            ? `linear-gradient(135deg, ${insight.color}10 0%, var(--card) 100%)`
+            ? `linear-gradient(135deg, color-mix(in srgb, ${insight.color} 8%, var(--card)) 0%, var(--card) 100%)`
             : "var(--home-panel-bg)",
-          border: `1px solid ${hovered ? insight.color + "50" : insight.color + "18"}`,
+          border: `1px solid color-mix(in srgb, ${insight.color} ${hovered ? "48%" : "24%"}, transparent)`,
           boxShadow: hovered
-            ? `0 0 40px ${insight.color}15, 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 ${insight.color}20`
+            ? `var(--insight-card-hover-shadow), inset 0 1px 0 color-mix(in srgb, ${insight.color} 18%, transparent)`
             : "var(--shadow-card)",
           transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateZ(${hovered ? 8 : 0}px)`,
           transformStyle: "preserve-3d",
@@ -160,7 +161,11 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         {/* Tag + index */}
         <div className="flex items-center justify-between mb-5">
           <span className="font-mono text-[10px] tracking-widest px-2 py-0.5 rounded"
-            style={{ background: `${insight.color}12`, border: `1px solid ${insight.color}30`, color: insight.color }}>
+            style={{
+              background: `color-mix(in srgb, ${insight.color} 10%, transparent)`,
+              border: `1px solid color-mix(in srgb, ${insight.color} 30%, transparent)`,
+              color: insight.color,
+            }}>
             {insight.tag}
           </span>
           <span className="font-mono text-xs" style={{ color: "var(--home-copy-muted)" }}>
@@ -172,8 +177,8 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         <div
           className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
           style={{
-            background: `${insight.color}12`,
-            border: `1px solid ${insight.color}25`,
+            background: `color-mix(in srgb, ${insight.color} 10%, transparent)`,
+            border: `1px solid color-mix(in srgb, ${insight.color} 28%, transparent)`,
           }}
         >
           <insight.icon className="w-4 h-4" style={{ color: insight.color }} />
@@ -188,14 +193,17 @@ function InsightCard({ insight, idx }: { insight: typeof insights[0]; index?: nu
         </p>
 
         {/* Mini chart */}
-        <div style={{ borderTop: `1px solid ${insight.color}15` }} className="pt-3">
+        <div
+          style={{ borderTop: `1px solid color-mix(in srgb, ${insight.color} 18%, transparent)` }}
+          className="pt-3"
+        >
           <Mini color={insight.color} />
         </div>
 
         {/* Glow bottom line */}
         <div className="absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300"
           style={{
-            background: `linear-gradient(to right, transparent, ${insight.color}70, transparent)`,
+            background: `linear-gradient(to right, transparent, color-mix(in srgb, ${insight.color} 70%, transparent), transparent)`,
             opacity: hovered ? 1 : 0,
           }}
         />
@@ -210,7 +218,7 @@ function MatrixRain() {
     <svg className="absolute right-0 top-0 bottom-0 w-32 pointer-events-none opacity-[0.08] dark:opacity-[0.04]" preserveAspectRatio="xMidYMid slice">
       {chars.map((c, i) => (
         <text key={i} x="50%" y={`${(i * 11) % 100}%`} textAnchor="middle"
-          fontSize="12" fill="#00FFD1" fontFamily="monospace">
+          fontSize="12" fill="var(--insight-teal)" fontFamily="monospace">
           <animate attributeName="opacity" values="0;1;0" dur={`${2 + i * 0.3}s`}
             begin={`${i * 0.4}s`} repeatCount="indefinite" />
           {c}
@@ -233,7 +241,7 @@ export function Insights() {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="max-w-3xl mb-16">
-          <p className="font-mono text-xs uppercase tracking-[0.4em] mb-4" style={{ color: "#00FFD1" }}>
+          <p className="font-mono text-xs uppercase tracking-[0.4em] mb-4" style={{ color: "var(--insight-teal)" }}>
             Intelligence Layer
           </p>
           <h2
@@ -245,7 +253,14 @@ export function Insights() {
             }}
           >
             DISCOVER{" "}
-            <span style={{ color: "#00FFD1", textShadow: "0 0 20px #00FFD1" }}>HIDDEN</span>
+            <span
+              style={{
+                color: "var(--insight-teal)",
+                textShadow: "var(--insight-heading-glow)",
+              }}
+            >
+              HIDDEN
+            </span>
             <br />PATTERNS
           </h2>
           <p className="text-base" style={{ color: "var(--home-copy-muted)", fontFamily: "'Space Grotesk', sans-serif" }}>

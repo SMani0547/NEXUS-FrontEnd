@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   LineChart, Line, BarChart, Bar, AreaChart, Area,
@@ -34,8 +34,8 @@ function Explorer() {
   const filtersQuery = useFiltersQuery();
   const filters = filtersQuery.data;
   const defaultYears = filters?.year_range ?? { min: 1961, max: 2024 };
-  const countries = filters?.countries ?? [];
-  const products = filters?.product_names ?? [];
+  const countries = Array.isArray(filters?.countries) ? filters.countries : [];
+  const products = Array.isArray(filters?.product_names) ? filters.product_names : [];
 
   const [typeFilter, setTypeFilter] = useState<(typeof typeOptions)[number]>("All");
   const [country, setCountry] = useState<string>("All");
@@ -50,8 +50,8 @@ function Explorer() {
       const untouched = current[0] === 1961 && current[1] === 2024;
       return untouched ? [filters.year_range?.min ?? current[0], filters.year_range?.max ?? current[1]] : current;
     });
-    setProduct((current) => current || filters.product_names[0] || "");
-  }, [filters]);
+    setProduct((current) => current || products[0] || "");
+  }, [filters, products]);
 
   const dataParams: DataParams = {
     type: typeFilter === "All" ? undefined : typeFilter,
@@ -62,7 +62,7 @@ function Explorer() {
 
   const dataQuery = useDataQuery(dataParams);
   const rows = useMemo(() => {
-    const base = dataQuery.data?.rows ?? [];
+    const base = Array.isArray(dataQuery.data?.rows) ? dataQuery.data.rows : [];
     if (!query) return base;
     const needle = query.toLowerCase();
     return base.filter((row) => `${row.country} ${row.product}`.toLowerCase().includes(needle));
@@ -103,7 +103,10 @@ function Explorer() {
   }, [productRows, country]);
 
   const compareData = useMemo(() => {
-    return (comparisonQuery.data?.countries ?? [])
+    const comparisonCountries = Array.isArray(comparisonQuery.data?.countries)
+      ? comparisonQuery.data.countries
+      : [];
+    return comparisonCountries
       .map((item) => ({
         country: item.country.length > 10 ? `${item.country.slice(0, 10)}...` : item.country,
         yield: Math.round(item.value ?? 0),
@@ -132,9 +135,12 @@ function Explorer() {
   );
 
   const heatmap = heatmapQuery.data;
+  const heatmapCells = Array.isArray(heatmap?.cells) ? heatmap.cells : [];
+  const heatmapCountries = Array.isArray(heatmap?.countries) ? heatmap.countries : [];
+  const heatmapProducts = Array.isArray(heatmap?.products) ? heatmap.products : [];
   const heatMax = useMemo(() => {
-    return Math.max(...(heatmap?.cells.map((cell) => cell.avg_yield ?? 0) ?? [0]), 1);
-  }, [heatmap]);
+    return Math.max(...heatmapCells.map((cell) => cell.avg_yield ?? 0), 1);
+  }, [heatmapCells]);
 
   const insights = useMemo(() => {
     const data = insightsQuery.data;
@@ -152,6 +158,12 @@ function Explorer() {
   };
 
   const isLoading = filtersQuery.isLoading || dataQuery.isLoading;
+  const hasApiError =
+    filtersQuery.isError ||
+    dataQuery.isError ||
+    comparisonQuery.isError ||
+    heatmapQuery.isError ||
+    insightsQuery.isError;
 
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
@@ -164,6 +176,12 @@ function Explorer() {
             countries, products, and time.
           </p>
         </div>
+
+        {hasApiError && (
+          <div className="mb-6 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-foreground">
+            Some Explorer data could not be loaded. The available charts are still shown; check the backend URL or try again shortly.
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-[280px_1fr] gap-6">
           <aside className="space-y-4">
@@ -243,73 +261,83 @@ function Explorer() {
 
             <div className="grid lg:grid-cols-2 gap-6">
               <ChartCard title="Yield Trend Over Time" subtitle={selectedProduct} loading={dataQuery.isLoading} onDownload={() => download({ product: selectedProduct })}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <LineChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} />
-                    <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Line type="monotone" dataKey="yield" stroke="var(--ocean)" strokeWidth={2.5} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
+                <ClientChart>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <LineChart data={trendData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} />
+                      <YAxis stroke="var(--muted-foreground)" fontSize={11} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Line type="monotone" dataKey="yield" stroke="var(--ocean)" strokeWidth={2.5} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ClientChart>
               </ChartCard>
 
               <ChartCard title="Country Comparison" subtitle={`${selectedProduct} - ${yearRange[1]}`} loading={comparisonQuery.isLoading} onDownload={() => download({ product: selectedProduct, year_max: yearRange[1], year_min: yearRange[1] })}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <BarChart data={compareData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="country" stroke="var(--muted-foreground)" fontSize={10} angle={-30} textAnchor="end" height={60} />
-                    <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Bar dataKey="yield" fill="var(--teal)" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <ClientChart>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={compareData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="country" stroke="var(--muted-foreground)" fontSize={10} angle={-30} textAnchor="end" height={60} />
+                      <YAxis stroke="var(--muted-foreground)" fontSize={11} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Bar dataKey="yield" fill="var(--teal)" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ClientChart>
               </ChartCard>
 
               <ChartCard title="Top Performing Products" subtitle="By average yield" loading={dataQuery.isLoading} onDownload={() => download()}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <BarChart data={topProducts} layout="vertical" margin={{ left: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} />
-                    <YAxis type="category" dataKey="product" stroke="var(--muted-foreground)" fontSize={11} width={90} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Bar dataKey="yield" fill="var(--ocean)" radius={[0, 6, 6, 0]}>
-                      {topProducts.map((_, i) => (
-                        <Cell key={i} fill={i === 0 ? "var(--teal)" : "var(--ocean)"} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                <ClientChart>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={topProducts} layout="vertical" margin={{ left: 10 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} />
+                      <YAxis type="category" dataKey="product" stroke="var(--muted-foreground)" fontSize={11} width={90} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Bar dataKey="yield" fill="var(--ocean)" radius={[0, 6, 6, 0]}>
+                        {topProducts.map((_, i) => (
+                          <Cell key={i} fill={i === 0 ? "var(--teal)" : "var(--ocean)"} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ClientChart>
               </ChartCard>
 
               <ChartCard title="Historical Growth Analysis" subtitle={selectedProduct} loading={dataQuery.isLoading} onDownload={() => download({ product: selectedProduct })}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <AreaChart data={trendData}>
-                    <defs>
-                      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--teal)" stopOpacity={0.5} />
-                        <stop offset="100%" stopColor="var(--teal)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} />
-                    <YAxis stroke="var(--muted-foreground)" fontSize={11} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Area type="monotone" dataKey="yield" stroke="var(--teal)" strokeWidth={2} fill="url(#areaGrad)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <ClientChart>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <AreaChart data={trendData}>
+                      <defs>
+                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--teal)" stopOpacity={0.5} />
+                          <stop offset="100%" stopColor="var(--teal)" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} />
+                      <YAxis stroke="var(--muted-foreground)" fontSize={11} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Area type="monotone" dataKey="yield" stroke="var(--teal)" strokeWidth={2} fill="url(#areaGrad)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </ClientChart>
               </ChartCard>
 
               <ChartCard title="Yield Distribution" subtitle={`${selectedProduct} - all countries`} loading={dataQuery.isLoading} onDownload={() => download({ product: selectedProduct })}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <ScatterChart>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} type="number" domain={[yearRange[0], yearRange[1]]} />
-                    <YAxis dataKey="yield" stroke="var(--muted-foreground)" fontSize={11} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Scatter data={scatterData} fill="var(--ocean)" fillOpacity={0.55} />
-                  </ScatterChart>
-                </ResponsiveContainer>
+                <ClientChart>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <ScatterChart>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                      <XAxis dataKey="year" stroke="var(--muted-foreground)" fontSize={11} type="number" domain={[yearRange[0], yearRange[1]]} />
+                      <YAxis dataKey="yield" stroke="var(--muted-foreground)" fontSize={11} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Scatter data={scatterData} fill="var(--ocean)" fillOpacity={0.55} />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </ClientChart>
               </ChartCard>
 
               <ChartCard title="Heatmap" subtitle="Country x Product (avg yield)" loading={heatmapQuery.isLoading}>
@@ -318,7 +346,7 @@ function Explorer() {
                     <thead>
                       <tr>
                         <th className="sticky left-0 bg-card" />
-                        {(heatmap?.products ?? []).map((name) => (
+                        {heatmapProducts.map((name) => (
                           <th key={name} className="px-1 py-1 text-muted-foreground font-normal whitespace-nowrap text-left">
                             <div className="origin-bottom-left -rotate-45 translate-y-2 w-4">{name.slice(0, 8)}</div>
                           </th>
@@ -326,11 +354,11 @@ function Explorer() {
                       </tr>
                     </thead>
                     <tbody>
-                      {(heatmap?.countries ?? []).map((countryName) => (
+                      {heatmapCountries.map((countryName) => (
                         <tr key={countryName}>
                           <td className="sticky left-0 bg-card pr-2 text-muted-foreground whitespace-nowrap">{countryName.slice(0, 10)}</td>
-                          {(heatmap?.products ?? []).map((productName) => {
-                            const cell = heatmap?.cells.find((item) => item.country === countryName && item.product === productName);
+                          {heatmapProducts.map((productName) => {
+                            const cell = heatmapCells.find((item) => item.country === countryName && item.product === productName);
                             const avg = cell?.avg_yield ?? 0;
                             const intensity = avg / heatMax;
                             return (
@@ -384,6 +412,20 @@ function SelectField({
         ))}
       </select>
     </div>
+  );
+}
+
+function ClientChart({ children }: { children: ReactNode }) {
+  return (
+    <ClientOnly
+      fallback={
+        <div className="grid h-[260px] place-items-center text-sm text-muted-foreground">
+          Preparing chart...
+        </div>
+      }
+    >
+      {children}
+    </ClientOnly>
   );
 }
 

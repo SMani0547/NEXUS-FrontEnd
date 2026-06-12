@@ -41,13 +41,13 @@ const applyThemeMode = (mode: ThemeMode) => {
 };
 
 export function Footer() {
-  const [themeMode, setThemeMode] = useState<ThemeMode>("system");
+  const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
 
   useEffect(() => {
     const storedMode = localStorage.getItem("nexus-theme-mode") as ThemeMode | null;
     const initialMode = storedMode === "light" || storedMode === "dark" || storedMode === "system"
       ? storedMode
-      : "system";
+      : "dark";
 
     setThemeMode(initialMode);
     applyThemeMode(initialMode);
@@ -66,7 +66,7 @@ export function Footer() {
   }, [themeMode]);
 
   return (
-    <footer className="bg-navy text-primary-foreground/90 mt-24">
+    <footer className="bg-navy text-primary-foreground/90">
       <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2 mb-4">

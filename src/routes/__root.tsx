@@ -17,7 +17,7 @@ import { Footer } from "@/components/Footer";
 const themeInitScript = `
 (() => {
   try {
-    const mode = localStorage.getItem("nexus-theme-mode") || "system";
+    const mode = localStorage.getItem("nexus-theme-mode") || "dark";
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     document.documentElement.classList.toggle("dark", mode === "dark" || (mode === "system" && prefersDark));
   } catch {

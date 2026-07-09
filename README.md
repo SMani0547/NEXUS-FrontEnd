@@ -21,23 +21,25 @@ The goal: make Pacific agricultural data accessible, explorable, and meaningful 
 
 ## Features
 
-- **Landing Hub** — Animated hero, regional stats with count-up animations, story timeline, insights, team, and data sources.
-- **Data Explorer** (`/explorer`) — Yield trends, country comparisons, product distribution, and a country × product heatmap with filters for country, product type, and year range.
-- **Pacific Map** (`/map`) — Interactive SVG map of the region with per-country detail panels, growth metrics, and product availability.
-- **Nexus AI** (`/ai`) — Chat interface with suggested questions, typing indicators, and mock responses derived from the dataset.
-- **Smooth in-page navigation** — Hash links in the navbar scroll smoothly to sections on the home page.
+- **Landing Hub** — An engaging homepage featuring an animated hero section, count-up regional statistics, an interactive story timeline, key insights, team information, and dataset source references.
+- **Data Explorer** (`/explorer`) —An interactive analytics dashboard that allows users to explore yield trends, compare countries, analyze product distributions, and visualize country-by-product relationships through a heatmap. Includes filters for country, product type, and year range.
+- **Pacific Map** (`/map`) — An interactive SVG map of the Pacific region that provides detailed country profiles, growth metrics, and available agricultural products through dynamic information panels.
+- **Nexus AI** (`/ai`) — A conversational AI interface with suggested prompts, typing animations, and dataset-based mock responses, enabling users to explore information in a natural, chat-driven format.
+- **Smooth in-page navigation** — Seamless in-page navigation using hash links, allowing users to smoothly scroll between sections of the landing page for an improved browsing experience.
 
 ---
 
 ## Tech Stack
 
-- **Framework**: TanStack Start v1 (React 19, SSR-ready, server functions)
-- **Build tool**: Vite 7
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4 + shadcn/ui
-- **Charts**: Recharts
-- **Maps**: Custom SVG (Leaflet-ready)
-- **Fonts**: Inter (body) + Space Grotesk (display)
+| Category | Technology |
+|----------|------------|
+| **Framework** | TanStack Start v1 (React 19, SSR-ready, Server Functions) |
+| **Build Tool** | Vite 7 |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 + shadcn/ui |
+| **Charts** | Recharts |
+| **Maps** | Custom SVG (Leaflet-ready) |
+| **Fonts** | Inter (body) + Space Grotesk (display) |
 
 ---
 
@@ -96,11 +98,12 @@ All data currently uses mock values from `src/lib/mock-data.ts`.
 
 Official **Pacific Dataviz Challenge 2026** datasets:
 
-- **Crop Yield — Disaggregated** — production by country, product, and year
-- **Livestock Yield — Disaggregated** — head counts and yields across the region
+| Dataset | Description | Notes |
+|----------|-------------|-------|
+| **Crop Yield — Disaggregated** | Production data by country, product, and year. | Some countries or years may have missing product data. |
+| **Livestock Yield — Disaggregated** | Livestock head counts and yield data by country and year. | Coverage varies by country and reporting year. |
 
-Notes: not every country reports every product, data availability varies by year, and missing values are handled gracefully.
-
+> **General Note:** The application automatically handles missing values and varying levels of data availability to ensure a consistent user experience.
 ---
 
 ## Development

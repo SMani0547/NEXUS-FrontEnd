@@ -2,7 +2,7 @@
 
 NEXUS is an AI-powered interactive data visualization platform that explores the relationship between **climate change, agriculture, and food production** across Pacific Island countries and territories.
 
-Built for the **Pacific Dataviz Challenge 2026**.
+Built for the **Pacific Dataviz Challenge 2026**. 
 
 ---
 

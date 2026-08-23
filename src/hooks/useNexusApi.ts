@@ -48,8 +48,57 @@ export function useCountryProfileQuery(country: string | null) {
   });
 }
 
+export function useProductsQuery(type?: string) {
+  return useQuery({
+    queryKey: ["nexus", "products", type ?? "all"],
+    queryFn: () => nexusApi.products(type),
+  });
+}
+
 export function useHeatmapQuery() {
   return useQuery({ queryKey: ["nexus", "heatmap"], queryFn: nexusApi.heatmap });
+}
+
+export function useEnhancedHeatmapQuery(params: { type?: string; limit_countries?: number; limit_products?: number } = {}) {
+  return useQuery({
+    queryKey: ["nexus", "heatmap-enhanced", params],
+    queryFn: () => nexusApi.heatmapEnhanced(params),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useYearHeatmapQuery(params: { product?: string; type?: string }, enabled = true) {
+  return useQuery({
+    queryKey: ["nexus", "heatmap-year", params],
+    queryFn: () => nexusApi.heatmapYear(params),
+    enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useTypeSummaryQuery() {
+  return useQuery({ queryKey: ["nexus", "type-summary"], queryFn: nexusApi.typeSummary });
+}
+
+export function useMultiTrendsQuery(
+  params: { product: string; countries?: string[]; year_min?: number; year_max?: number; type?: string },
+  enabled = true,
+) {
+  return useQuery({
+    queryKey: ["nexus", "multi-trends", params],
+    queryFn: () => nexusApi.multiTrends(params),
+    enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useRankingsQuery(params: { type?: string; year?: number; limit?: number } = {}, enabled = true) {
+  return useQuery({
+    queryKey: ["nexus", "rankings", params],
+    queryFn: () => nexusApi.rankings(params),
+    enabled,
+    placeholderData: keepPreviousData,
+  });
 }
 
 export function useInsightsQuery(params: { product?: string; year_min?: number; year_max?: number }) {
